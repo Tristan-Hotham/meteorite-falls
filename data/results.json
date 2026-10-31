@@ -1,0 +1,1886 @@
+{
+ "source": {
+  "n_rows": 45716,
+  "n": 45715,
+  "n_valid": 45640,
+  "n_relict": 75,
+  "falls": 1107,
+  "finds": 44608,
+  "falls_pct": 2.42,
+  "finds_pct": 97.58,
+  "located": 32186,
+  "located_pct": 70.41,
+  "unlocated": 13529,
+  "falls_located": 1096,
+  "finds_located": 31090,
+  "coords_missing": 7315,
+  "coords_zero": 6214,
+  "nwa": 4499,
+  "nwa_unlocated": 4300,
+  "region_from_name": 11990,
+  "no_year": 292,
+  "with_mass": 45585,
+  "last_year": 2013,
+  "n_last_year": 11,
+  "n_classes": 466,
+  "checks": {
+   "rows_a": 45716,
+   "rows_c": 45716,
+   "rows_b": 45716,
+   "a_vs_c_cells_differing": {
+    "name": 0,
+    "nametype": 0,
+    "recclass": 0,
+    "fall": 0,
+    "year": 3,
+    "mass (g)": 0,
+    "reclat": 0,
+    "reclong": 0
+   },
+   "year_only_in_c": [
+    "Havana",
+    "Ur",
+    "Wietrzno-Bobrka"
+   ],
+   "b_names_matched": 45716,
+   "b_mass_differ": 0,
+   "b_lat_differ": 0,
+   "b_year_differ": 5,
+   "future_years": [
+    "Northwest Africa 7701"
+   ],
+   "coords_missing": 7315,
+   "coords_zero": 6214,
+   "region_from_name": 11990,
+   "located_no_country": 5
+  }
+ },
+ "regions": {
+  "Antarctica": {
+   "n": 29783,
+   "pct": 65.15,
+   "falls": 0,
+   "finds": 29783,
+   "falls_pct": 0.0,
+   "finds_pct": 66.77,
+   "median_mass": 13.4,
+   "from_name": 7684
+  },
+  "Sahara": {
+   "n": 6754,
+   "pct": 14.77,
+   "falls": 26,
+   "finds": 6728,
+   "falls_pct": 2.35,
+   "finds_pct": 15.08,
+   "median_mass": 235.0,
+   "from_name": 4305
+  },
+  "Arabia": {
+   "n": 3163,
+   "pct": 6.92,
+   "falls": 9,
+   "finds": 3154,
+   "falls_pct": 0.81,
+   "finds_pct": 7.07,
+   "median_mass": 220.0,
+   "from_name": 0
+  },
+  "Other hot deserts": {
+   "n": 905,
+   "pct": 1.98,
+   "falls": 3,
+   "finds": 902,
+   "falls_pct": 0.27,
+   "finds_pct": 2.02,
+   "median_mass": 98.0,
+   "from_name": 1
+  },
+  "Rest of the world": {
+   "n": 3571,
+   "pct": 7.81,
+   "falls": 1058,
+   "finds": 2513,
+   "falls_pct": 95.57,
+   "finds_pct": 5.63,
+   "median_mass": 1700.0,
+   "from_name": 0
+  },
+  "Not known": {
+   "n": 1539,
+   "pct": 3.37,
+   "falls": 11,
+   "finds": 1528,
+   "falls_pct": 0.99,
+   "finds_pct": 3.43,
+   "median_mass": 67.9,
+   "from_name": 0
+  }
+ },
+ "hot": {
+  "n": 10822,
+  "pct": 23.67,
+  "sa_pct": 21.69,
+  "falls": 38,
+  "by_desert": {
+   "Atacama": 403,
+   "Australian deserts": 501
+  }
+ },
+ "icedesert": {
+  "pct": 88.82,
+  "finds_pct": 90.94
+ },
+ "rest": {
+  "falls_pct": 95.57,
+  "pct": 7.81,
+  "finds": 2513
+ },
+ "areas": [
+  {
+   "area": "Yamato",
+   "n": 7269,
+   "region": "Antarctica",
+   "first": 1969
+  },
+  {
+   "area": "Northwest Africa",
+   "n": 4499,
+   "region": "Sahara",
+   "first": 1970
+  },
+  {
+   "area": "Queen Alexandra Range",
+   "n": 3444,
+   "region": "Antarctica",
+   "first": 1986
+  },
+  {
+   "area": "Grove Mountains",
+   "n": 2494,
+   "region": "Antarctica",
+   "first": 1999
+  },
+  {
+   "area": "Elephant Moraine",
+   "n": 2187,
+   "region": "Antarctica",
+   "first": 1979
+  },
+  {
+   "area": "Miller Range",
+   "n": 2038,
+   "region": "Antarctica",
+   "first": 1985
+  },
+  {
+   "area": "Lewis Cliff",
+   "n": 1870,
+   "region": "Antarctica",
+   "first": 1985
+  },
+  {
+   "area": "Allan Hills",
+   "n": 1754,
+   "region": "Antarctica",
+   "first": 1976
+  },
+  {
+   "area": "LaPaz Icefield",
+   "n": 1550,
+   "region": "Antarctica",
+   "first": 1991
+  },
+  {
+   "area": "Asuka",
+   "n": 1509,
+   "region": "Antarctica",
+   "first": 1986
+  },
+  {
+   "area": "Dhofar",
+   "n": 1404,
+   "region": "Arabia",
+   "first": 1998
+  },
+  {
+   "area": "Meteorite Hills",
+   "n": 1130,
+   "region": "Antarctica",
+   "first": 1978
+  },
+  {
+   "area": "Dar al Gani",
+   "n": 1049,
+   "region": "Sahara",
+   "first": 1995
+  },
+  {
+   "area": "MacAlpine Hills",
+   "n": 1026,
+   "region": "Antarctica",
+   "first": 1987
+  },
+  {
+   "area": "Dominion Range",
+   "n": 846,
+   "region": "Antarctica",
+   "first": 1985
+  },
+  {
+   "area": "Frontier Mountain",
+   "n": 782,
+   "region": "Antarctica",
+   "first": 1984
+  },
+  {
+   "area": "Larkman Nunatak",
+   "n": 700,
+   "region": "Not known",
+   "first": 2003
+  },
+  {
+   "area": "Jiddat al Harasis",
+   "n": 698,
+   "region": "Arabia",
+   "first": 1957
+  },
+  {
+   "area": "Pecora Escarpment",
+   "n": 633,
+   "region": "Antarctica",
+   "first": 1982
+  },
+  {
+   "area": "Sayh al Uhaymir",
+   "n": 471,
+   "region": "Arabia",
+   "first": 1998
+  }
+ ],
+ "areas_top_share": 62.59,
+ "antarctic": {
+  "first": {
+   "name": "Adelie Land",
+   "y": 1912
+  },
+  "yamato": {
+   "y": 1969,
+   "n_first": 9,
+   "n": 7269
+  },
+  "pre1969": 4,
+  "median_mass": 13.4
+ },
+ "decades": [
+  {
+   "dec": 1800,
+   "falls": 17,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 0,
+   "Rest of the world": 4,
+   "Not known": 1,
+   "finds": 5
+  },
+  {
+   "dec": 1810,
+   "falls": 24,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 0,
+   "Rest of the world": 6,
+   "Not known": 0,
+   "finds": 6
+  },
+  {
+   "dec": 1820,
+   "falls": 25,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 1,
+   "Rest of the world": 4,
+   "Not known": 0,
+   "finds": 5
+  },
+  {
+   "dec": 1830,
+   "falls": 21,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 0,
+   "Rest of the world": 12,
+   "Not known": 0,
+   "finds": 12
+  },
+  {
+   "dec": 1840,
+   "falls": 31,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 0,
+   "Rest of the world": 18,
+   "Not known": 0,
+   "finds": 18
+  },
+  {
+   "dec": 1850,
+   "falls": 36,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 2,
+   "Rest of the world": 33,
+   "Not known": 0,
+   "finds": 35
+  },
+  {
+   "dec": 1860,
+   "falls": 56,
+   "Antarctica": 0,
+   "Sahara": 1,
+   "Arabia": 1,
+   "Other hot deserts": 4,
+   "Rest of the world": 33,
+   "Not known": 0,
+   "finds": 39
+  },
+  {
+   "dec": 1870,
+   "falls": 51,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 8,
+   "Rest of the world": 29,
+   "Not known": 1,
+   "finds": 38
+  },
+  {
+   "dec": 1880,
+   "falls": 40,
+   "Antarctica": 0,
+   "Sahara": 1,
+   "Arabia": 0,
+   "Other hot deserts": 9,
+   "Rest of the world": 72,
+   "Not known": 1,
+   "finds": 83
+  },
+  {
+   "dec": 1890,
+   "falls": 51,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 5,
+   "Rest of the world": 69,
+   "Not known": 1,
+   "finds": 75
+  },
+  {
+   "dec": 1900,
+   "falls": 56,
+   "Antarctica": 0,
+   "Sahara": 0,
+   "Arabia": 0,
+   "Other hot deserts": 7,
+   "Rest of the world": 74,
+   "Not known": 2,
+   "finds": 83
+  },
+  {
+   "dec": 1910,
+   "falls": 66,
+   "Antarctica": 1,
+   "Sahara": 1,
+   "Arabia": 0,
+   "Other hot deserts": 9,
+   "Rest of the world": 76,
+   "Not known": 1,
+   "finds": 88
+  },
+  {
+   "dec": 1920,
+   "falls": 70,
+   "Antarctica": 0,
+   "Sahara": 1,
+   "Arabia": 0,
+   "Other hot deserts": 9,
+   "Rest of the world": 79,
+   "Not known": 0,
+   "finds": 89
+  },
+  {
+   "dec": 1930,
+   "falls": 91,
+   "Antarctica": 0,
+   "Sahara": 2,
+   "Arabia": 5,
+   "Other hot deserts": 13,
+   "Rest of the world": 193,
+   "Not known": 5,
+   "finds": 218
+  },
+  {
+   "dec": 1940,
+   "falls": 58,
+   "Antarctica": 0,
+   "Sahara": 2,
+   "Arabia": 0,
+   "Other hot deserts": 8,
+   "Rest of the world": 124,
+   "Not known": 4,
+   "finds": 138
+  },
+  {
+   "dec": 1950,
+   "falls": 60,
+   "Antarctica": 0,
+   "Sahara": 4,
+   "Arabia": 15,
+   "Other hot deserts": 8,
+   "Rest of the world": 121,
+   "Not known": 4,
+   "finds": 152
+  },
+  {
+   "dec": 1960,
+   "falls": 62,
+   "Antarctica": 12,
+   "Sahara": 7,
+   "Arabia": 6,
+   "Other hot deserts": 49,
+   "Rest of the world": 251,
+   "Not known": 10,
+   "finds": 335
+  },
+  {
+   "dec": 1970,
+   "falls": 60,
+   "Antarctica": 4398,
+   "Sahara": 6,
+   "Arabia": 2,
+   "Other hot deserts": 59,
+   "Rest of the world": 440,
+   "Not known": 4,
+   "finds": 4909
+  },
+  {
+   "dec": 1980,
+   "falls": 56,
+   "Antarctica": 6365,
+   "Sahara": 147,
+   "Arabia": 1,
+   "Other hot deserts": 60,
+   "Rest of the world": 179,
+   "Not known": 14,
+   "finds": 6766
+  },
+  {
+   "dec": 1990,
+   "falls": 56,
+   "Antarctica": 8925,
+   "Sahara": 1730,
+   "Arabia": 156,
+   "Other hot deserts": 241,
+   "Rest of the world": 225,
+   "Not known": 286,
+   "finds": 11563
+  },
+  {
+   "dec": 2000,
+   "falls": 59,
+   "Antarctica": 9612,
+   "Sahara": 3925,
+   "Arabia": 2516,
+   "Other hot deserts": 110,
+   "Rest of the world": 388,
+   "Not known": 1146,
+   "finds": 17697
+  },
+  {
+   "dec": 2010,
+   "falls": 13,
+   "Antarctica": 470,
+   "Sahara": 763,
+   "Arabia": 348,
+   "Other hot deserts": 296,
+   "Rest of the world": 42,
+   "Not known": 31,
+   "finds": 1950
+  }
+ ],
+ "falls_time": {
+  "peak_dec": 1930,
+  "peak_n": 91,
+  "d1800": 17,
+  "d1860": 56,
+  "pre1800": 48,
+  "since1950_mean": 58.8,
+  "d1960": 62,
+  "d2000": 59,
+  "d2010": 13,
+  "oldest": [
+   {
+    "name": "Nogata",
+    "y": 860,
+    "iso": "JPN",
+    "country": "Japan"
+   },
+   {
+    "name": "Narni",
+    "y": 920,
+    "iso": "ITA",
+    "country": "Italy"
+   },
+   {
+    "name": "Elbogen",
+    "y": 1399,
+    "iso": "CZE",
+    "country": "Czech Republic"
+   },
+   {
+    "name": "Rivolta de Bassi",
+    "y": 1490,
+    "iso": "ITA",
+    "country": "Italy"
+   },
+   {
+    "name": "Ensisheim",
+    "y": 1491,
+    "iso": "FRA",
+    "country": "France"
+   },
+   {
+    "name": "Valdinoce",
+    "y": 1495,
+    "iso": "ITA",
+    "country": "Italy"
+   }
+  ],
+  "pop_growth_pct": 98.4,
+  "falls_change_pct": -4.8
+ },
+ "finds_time": {
+  "pre1970_pct": 3.23,
+  "since1970": 42885,
+  "since1970_pct": 96.77,
+  "peak_dec": 2000,
+  "peak_n": 17697
+ },
+ "countries": {
+  "n_with_falls": 109,
+  "n_big": 154,
+  "n_big_falls": 106,
+  "spearman": 0.34,
+  "pearson_log": 0.62,
+  "falls_land": 1094,
+  "land_m_km2": 146.8,
+  "top": [
+   {
+    "iso": "USA",
+    "name": "United States",
+    "falls": 147,
+    "expected": 70.52,
+    "ratio": 2.08
+   },
+   {
+    "iso": "IND",
+    "name": "India",
+    "falls": 125,
+    "expected": 23.49,
+    "ratio": 5.32
+   },
+   {
+    "iso": "FRA",
+    "name": "France",
+    "falls": 61,
+    "expected": 4.74,
+    "ratio": 12.86
+   },
+   {
+    "iso": "CHN",
+    "name": "China",
+    "falls": 58,
+    "expected": 69.85,
+    "ratio": 0.83
+   },
+   {
+    "iso": "RUS",
+    "name": "Russia",
+    "falls": 49,
+    "expected": 126.52,
+    "ratio": 0.39
+   },
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "falls": 42,
+    "expected": 2.78,
+    "ratio": 15.09
+   },
+   {
+    "iso": "DEU",
+    "name": "Germany",
+    "falls": 32,
+    "expected": 2.67,
+    "ratio": 12.01
+   },
+   {
+    "iso": "ITA",
+    "name": "Italy",
+    "falls": 31,
+    "expected": 2.24,
+    "ratio": 13.81
+   },
+   {
+    "iso": "UKR",
+    "name": "Ukraine",
+    "falls": 30,
+    "expected": 4.26,
+    "ratio": 7.04
+   },
+   {
+    "iso": "ESP",
+    "name": "Spain",
+    "falls": 25,
+    "expected": 3.78,
+    "ratio": 6.62
+   },
+   {
+    "iso": "ARG",
+    "name": "Argentina",
+    "falls": 23,
+    "expected": 20.74,
+    "ratio": 1.11
+   },
+   {
+    "iso": "BRA",
+    "name": "Brazil",
+    "falls": 22,
+    "expected": 63.13,
+    "ratio": 0.35
+   },
+   {
+    "iso": "MEX",
+    "name": "Mexico",
+    "falls": 19,
+    "expected": 14.59,
+    "ratio": 1.3
+   },
+   {
+    "iso": "GBR",
+    "name": "United Kingdom",
+    "falls": 19,
+    "expected": 1.82,
+    "ratio": 10.46
+   },
+   {
+    "iso": "ZAF",
+    "name": "South Africa",
+    "falls": 18,
+    "expected": 9.09,
+    "ratio": 1.98
+   }
+  ],
+  "ratio_top": [
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "falls": 42,
+    "ratio": 15.09,
+    "expected": 2.78
+   },
+   {
+    "iso": "ITA",
+    "name": "Italy",
+    "falls": 31,
+    "ratio": 13.81,
+    "expected": 2.24
+   },
+   {
+    "iso": "FRA",
+    "name": "France",
+    "falls": 61,
+    "ratio": 12.86,
+    "expected": 4.74
+   },
+   {
+    "iso": "DEU",
+    "name": "Germany",
+    "falls": 32,
+    "ratio": 12.01,
+    "expected": 2.67
+   },
+   {
+    "iso": "GBR",
+    "name": "United Kingdom",
+    "falls": 19,
+    "ratio": 10.46,
+    "expected": 1.82
+   },
+   {
+    "iso": "UKR",
+    "name": "Ukraine",
+    "falls": 30,
+    "ratio": 7.04,
+    "expected": 4.26
+   },
+   {
+    "iso": "ESP",
+    "name": "Spain",
+    "falls": 25,
+    "ratio": 6.62,
+    "expected": 3.78
+   },
+   {
+    "iso": "IND",
+    "name": "India",
+    "falls": 125,
+    "ratio": 5.32,
+    "expected": 23.49
+   },
+   {
+    "iso": "ROU",
+    "name": "Romania",
+    "falls": 9,
+    "ratio": 5.11,
+    "expected": 1.76
+   },
+   {
+    "iso": "POL",
+    "name": "Poland",
+    "falls": 11,
+    "ratio": 4.71,
+    "expected": 2.34
+   },
+   {
+    "iso": "BFA",
+    "name": "Burkina Faso",
+    "falls": 9,
+    "ratio": 4.43,
+    "expected": 2.03
+   },
+   {
+    "iso": "NOR",
+    "name": "Norway",
+    "falls": 9,
+    "ratio": 3.16,
+    "expected": 2.85
+   }
+  ],
+  "ratio_low": [
+   {
+    "iso": "ATA",
+    "name": "Antarctica",
+    "falls": 0,
+    "ratio": 0.0,
+    "expected": 92.08
+   },
+   {
+    "iso": "GRL",
+    "name": "Greenland",
+    "falls": 0,
+    "ratio": 0.0,
+    "expected": 16.05
+   },
+   {
+    "iso": "LBY",
+    "name": "Libya",
+    "falls": 1,
+    "ratio": 0.08,
+    "expected": 12.1
+   },
+   {
+    "iso": "IRN",
+    "name": "Iran",
+    "falls": 2,
+    "ratio": 0.17,
+    "expected": 12.09
+   },
+   {
+    "iso": "CAN",
+    "name": "Canada",
+    "falls": 16,
+    "ratio": 0.22,
+    "expected": 74.1
+   },
+   {
+    "iso": "AUS",
+    "name": "Australia",
+    "falls": 15,
+    "ratio": 0.26,
+    "expected": 57.31
+   },
+   {
+    "iso": "MNG",
+    "name": "Mongolia",
+    "falls": 3,
+    "ratio": 0.26,
+    "expected": 11.66
+   },
+   {
+    "iso": "SAU",
+    "name": "Saudi Arabia",
+    "falls": 4,
+    "ratio": 0.28,
+    "expected": 14.32
+   },
+   {
+    "iso": "COD",
+    "name": "Democratic Republic of the Congo",
+    "falls": 5,
+    "ratio": 0.29,
+    "expected": 17.33
+   },
+   {
+    "iso": "KAZ",
+    "name": "Kazakhstan",
+    "falls": 6,
+    "ratio": 0.3,
+    "expected": 20.27
+   }
+  ],
+  "USA": {
+   "name": "United States",
+   "falls": 147,
+   "finds": 1514,
+   "expected": 70.52,
+   "ratio": 2.08,
+   "per_10m": 4.48,
+   "per_m_km2": 15.5
+  },
+  "IND": {
+   "name": "India",
+   "falls": 125,
+   "finds": 9,
+   "expected": 23.49,
+   "ratio": 5.32,
+   "per_10m": 0.91,
+   "per_m_km2": 39.6
+  },
+  "FRA": {
+   "name": "France",
+   "falls": 61,
+   "finds": 11,
+   "expected": 4.74,
+   "ratio": 12.86,
+   "per_10m": 9.1,
+   "per_m_km2": 95.8
+  },
+  "JPN": {
+   "name": "Japan",
+   "falls": 42,
+   "finds": 12,
+   "expected": 2.78,
+   "ratio": 15.09,
+   "per_10m": 3.33,
+   "per_m_km2": 112.4
+  },
+  "DEU": {
+   "name": "Germany",
+   "falls": 32,
+   "finds": 16,
+   "expected": 2.67,
+   "ratio": 12.01,
+   "per_10m": 3.85,
+   "per_m_km2": 89.5
+  },
+  "ITA": {
+   "name": "Italy",
+   "falls": 31,
+   "finds": 6,
+   "expected": 2.24,
+   "ratio": 13.81,
+   "per_10m": 5.14,
+   "per_m_km2": 102.9
+  },
+  "GBR": {
+   "name": "United Kingdom",
+   "falls": 19,
+   "finds": 4,
+   "expected": 1.82,
+   "ratio": 10.46,
+   "per_10m": 2.84,
+   "per_m_km2": 77.9
+  },
+  "CHN": {
+   "name": "China",
+   "falls": 58,
+   "finds": 45,
+   "expected": 69.85,
+   "ratio": 0.83,
+   "per_10m": 0.41,
+   "per_m_km2": 6.2
+  },
+  "RUS": {
+   "name": "Russia",
+   "falls": 49,
+   "finds": 83,
+   "expected": 126.52,
+   "ratio": 0.39,
+   "per_10m": 3.39,
+   "per_m_km2": 2.9
+  },
+  "BRA": {
+   "name": "Brazil",
+   "falls": 22,
+   "finds": 36,
+   "expected": 63.13,
+   "ratio": 0.35,
+   "per_10m": 1.04,
+   "per_m_km2": 2.6
+  },
+  "AUS": {
+   "name": "Australia",
+   "falls": 15,
+   "finds": 628,
+   "expected": 57.31,
+   "ratio": 0.26,
+   "per_10m": 5.91,
+   "per_m_km2": 2.0
+  },
+  "CAN": {
+   "name": "Canada",
+   "falls": 16,
+   "finds": 44,
+   "expected": 74.1,
+   "ratio": 0.22,
+   "per_10m": 4.26,
+   "per_m_km2": 1.6
+  },
+  "ATA": {
+   "name": "Antarctica",
+   "falls": 0,
+   "finds": 22099,
+   "expected": 92.08,
+   "ratio": 0.0,
+   "per_10m": 0.0,
+   "per_m_km2": 0.0
+  },
+  "DZA": {
+   "name": "Algeria",
+   "falls": 7,
+   "finds": 615,
+   "expected": 17.2,
+   "ratio": 0.41,
+   "per_10m": 1.63,
+   "per_m_km2": 3.0
+  },
+  "LBY": {
+   "name": "Libya",
+   "falls": 1,
+   "finds": 1466,
+   "expected": 12.1,
+   "ratio": 0.08,
+   "per_10m": 1.48,
+   "per_m_km2": 0.6
+  },
+  "OMN": {
+   "name": "Oman",
+   "falls": 0,
+   "finds": 3095,
+   "expected": 2.32,
+   "ratio": 0.0,
+   "per_10m": 0.0,
+   "per_m_km2": 0.0
+  },
+  "MAR": {
+   "name": "Morocco",
+   "falls": 8,
+   "finds": 216,
+   "expected": 4.41,
+   "ratio": 1.81,
+   "per_10m": 2.19,
+   "per_m_km2": 13.5
+  },
+  "COD": {
+   "name": "Democratic Republic of the Congo",
+   "falls": 5,
+   "finds": 0,
+   "expected": 17.33,
+   "ratio": 0.29,
+   "per_10m": 0.58,
+   "per_m_km2": 2.2
+  }
+ },
+ "continents": {
+  "Europe": {
+   "cont": "Europe",
+   "falls": 374,
+   "expected": 171.2,
+   "ratio": 2.18,
+   "area_pct": 15.7,
+   "falls_pct": 34.2,
+   "pop_pct": 9.7,
+   "per_10m": 5.01,
+   "finds": 260
+  },
+  "Asia": {
+   "cont": "Asia",
+   "falls": 325,
+   "expected": 232.3,
+   "ratio": 1.4,
+   "area_pct": 21.2,
+   "falls_pct": 29.7,
+   "pop_pct": 59.5,
+   "per_10m": 0.71,
+   "finds": 3248
+  },
+  "North America": {
+   "cont": "North America",
+   "falls": 183,
+   "expected": 180.8,
+   "ratio": 1.01,
+   "area_pct": 16.5,
+   "falls_pct": 16.7,
+   "pop_pct": 7.6,
+   "per_10m": 3.13,
+   "finds": 1643
+  },
+  "Africa": {
+   "cont": "Africa",
+   "falls": 141,
+   "expected": 222.7,
+   "ratio": 0.63,
+   "area_pct": 20.4,
+   "falls_pct": 12.9,
+   "pop_pct": 17.1,
+   "per_10m": 1.08,
+   "finds": 2708
+  },
+  "South America": {
+   "cont": "South America",
+   "falls": 52,
+   "expected": 131.3,
+   "ratio": 0.4,
+   "area_pct": 12.0,
+   "falls_pct": 4.8,
+   "pop_pct": 5.6,
+   "per_10m": 1.22,
+   "finds": 494
+  },
+  "Oceania": {
+   "cont": "Oceania",
+   "falls": 19,
+   "expected": 63.4,
+   "ratio": 0.3,
+   "area_pct": 5.8,
+   "falls_pct": 1.7,
+   "pop_pct": 0.6,
+   "per_10m": 4.48,
+   "finds": 635
+  },
+  "Antarctica": {
+   "cont": "Antarctica",
+   "falls": 0,
+   "expected": 92.2,
+   "ratio": 0.0,
+   "area_pct": 8.4,
+   "falls_pct": 0.0,
+   "pop_pct": 0.0,
+   "per_10m": null,
+   "finds": 22099
+  }
+ },
+ "continents_list": [
+  {
+   "cont": "Europe",
+   "falls": 374,
+   "expected": 171.2,
+   "ratio": 2.18,
+   "area_pct": 15.7,
+   "falls_pct": 34.2,
+   "pop_pct": 9.7,
+   "per_10m": 5.01,
+   "finds": 260
+  },
+  {
+   "cont": "Asia",
+   "falls": 325,
+   "expected": 232.3,
+   "ratio": 1.4,
+   "area_pct": 21.2,
+   "falls_pct": 29.7,
+   "pop_pct": 59.5,
+   "per_10m": 0.71,
+   "finds": 3248
+  },
+  {
+   "cont": "North America",
+   "falls": 183,
+   "expected": 180.8,
+   "ratio": 1.01,
+   "area_pct": 16.5,
+   "falls_pct": 16.7,
+   "pop_pct": 7.6,
+   "per_10m": 3.13,
+   "finds": 1643
+  },
+  {
+   "cont": "Africa",
+   "falls": 141,
+   "expected": 222.7,
+   "ratio": 0.63,
+   "area_pct": 20.4,
+   "falls_pct": 12.9,
+   "pop_pct": 17.1,
+   "per_10m": 1.08,
+   "finds": 2708
+  },
+  {
+   "cont": "South America",
+   "falls": 52,
+   "expected": 131.3,
+   "ratio": 0.4,
+   "area_pct": 12.0,
+   "falls_pct": 4.8,
+   "pop_pct": 5.6,
+   "per_10m": 1.22,
+   "finds": 494
+  },
+  {
+   "cont": "Oceania",
+   "falls": 19,
+   "expected": 63.4,
+   "ratio": 0.3,
+   "area_pct": 5.8,
+   "falls_pct": 1.7,
+   "pop_pct": 0.6,
+   "per_10m": 4.48,
+   "finds": 635
+  },
+  {
+   "cont": "Antarctica",
+   "falls": 0,
+   "expected": 92.2,
+   "ratio": 0.0,
+   "area_pct": 8.4,
+   "falls_pct": 0.0,
+   "pop_pct": 0.0,
+   "per_10m": null,
+   "finds": 22099
+  }
+ ],
+ "ocean": {
+  "land_pct": 29.2,
+  "falls_per_land": 2.4
+ },
+ "heaviest": [
+  {
+   "name": "Hoba",
+   "t": 60.0,
+   "fall": "Found",
+   "y": 1920,
+   "cls": "Iron, IVB",
+   "group": "Iron",
+   "iso": "NAM",
+   "country": "Namibia",
+   "lat": -19.58333,
+   "lon": 17.91667,
+   "id": 11890
+  },
+  {
+   "name": "Cape York",
+   "t": 58.2,
+   "fall": "Found",
+   "y": 1818,
+   "cls": "Iron, IIIAB",
+   "group": "Iron",
+   "iso": "GRL",
+   "country": "Greenland",
+   "lat": 76.13333,
+   "lon": -64.93333,
+   "id": 5262
+  },
+  {
+   "name": "Campo del Cielo",
+   "t": 50.0,
+   "fall": "Found",
+   "y": 1575,
+   "cls": "Iron, IAB-MG",
+   "group": "Iron",
+   "iso": "ARG",
+   "country": "Argentina",
+   "lat": -27.46667,
+   "lon": -60.58333,
+   "id": 5247
+  },
+  {
+   "name": "Canyon Diablo",
+   "t": 30.0,
+   "fall": "Found",
+   "y": 1891,
+   "cls": "Iron, IAB-MG",
+   "group": "Iron",
+   "iso": "USA",
+   "country": "United States",
+   "lat": 35.05,
+   "lon": -111.03333,
+   "id": 5257
+  },
+  {
+   "name": "Armanty",
+   "t": 28.0,
+   "fall": "Found",
+   "y": 1898,
+   "cls": "Iron, IIIE",
+   "group": "Iron",
+   "iso": "CHN",
+   "country": "China",
+   "lat": 47.0,
+   "lon": 88.0,
+   "id": 2335
+  },
+  {
+   "name": "Gibeon",
+   "t": 26.0,
+   "fall": "Found",
+   "y": 1836,
+   "cls": "Iron, IVA",
+   "group": "Iron",
+   "iso": "NAM",
+   "country": "Namibia",
+   "lat": -25.5,
+   "lon": 18.0,
+   "id": 10912
+  },
+  {
+   "name": "Chupaderos",
+   "t": 24.3,
+   "fall": "Found",
+   "y": 1852,
+   "cls": "Iron, IIIAB",
+   "group": "Iron",
+   "iso": "MEX",
+   "country": "Mexico",
+   "lat": 27.0,
+   "lon": -105.1,
+   "id": 5363
+  },
+  {
+   "name": "Mundrabilla",
+   "t": 24.0,
+   "fall": "Found",
+   "y": 1911,
+   "cls": "Iron, IAB-ung",
+   "group": "Iron",
+   "iso": "AUS",
+   "country": "Australia",
+   "lat": -30.78333,
+   "lon": 127.55,
+   "id": 16852
+  },
+  {
+   "name": "Sikhote-Alin",
+   "t": 23.0,
+   "fall": "Fell",
+   "y": 1947,
+   "cls": "Iron, IIAB",
+   "group": "Iron",
+   "iso": "RUS",
+   "country": "Russia",
+   "lat": 46.16,
+   "lon": 134.65333,
+   "id": 23593
+  },
+  {
+   "name": "Bacubirito",
+   "t": 22.0,
+   "fall": "Found",
+   "y": 1863,
+   "cls": "Iron, ungrouped",
+   "group": "Iron",
+   "iso": "MEX",
+   "country": "Mexico",
+   "lat": 26.2,
+   "lon": -107.83333,
+   "id": 4919
+  },
+  {
+   "name": "Mbosi",
+   "t": 16.0,
+   "fall": "Found",
+   "y": 1930,
+   "cls": "Iron, ungrouped",
+   "group": "Iron",
+   "iso": "TZA",
+   "country": "Tanzania",
+   "lat": -9.11667,
+   "lon": 33.06667,
+   "id": 15456
+  },
+  {
+   "name": "Willamette",
+   "t": 15.5,
+   "fall": "Found",
+   "y": 1902,
+   "cls": "Iron, IIIAB",
+   "group": "Iron",
+   "iso": "USA",
+   "country": "United States",
+   "lat": 45.36667,
+   "lon": -122.58333,
+   "id": 24269
+  }
+ ],
+ "heaviest_falls": [
+  {
+   "name": "Sikhote-Alin",
+   "t": 23.0,
+   "y": 1947,
+   "cls": "Iron, IIAB",
+   "country": "Russia"
+  },
+  {
+   "name": "Jilin",
+   "t": 4.0,
+   "y": 1976,
+   "cls": "H5",
+   "country": "China"
+  },
+  {
+   "name": "Allende",
+   "t": 2.0,
+   "y": 1969,
+   "cls": "CV3",
+   "country": "Mexico"
+  },
+  {
+   "name": "Norton County",
+   "t": 1.1,
+   "y": 1948,
+   "cls": "Aubrite",
+   "country": "United States"
+  },
+  {
+   "name": "Kunya-Urgench",
+   "t": 1.1,
+   "y": 1998,
+   "cls": "H5",
+   "country": "Turkmenistan"
+  },
+  {
+   "name": "Jianshi",
+   "t": 0.6,
+   "y": 1890,
+   "cls": "Iron, IIIAB",
+   "country": "China"
+  },
+  {
+   "name": "Knyahinya",
+   "t": 0.5,
+   "y": 1866,
+   "cls": "L/LL5",
+   "country": "Slovakia"
+  },
+  {
+   "name": "Ochansk",
+   "t": 0.5,
+   "y": 1887,
+   "cls": "H4",
+   "country": "Russia"
+  }
+ ],
+ "mass": {
+  "median_fall": 2800.0,
+  "median_find": 30.5,
+  "median_ant": 13.4,
+  "median_rest_find": 1700.0,
+  "median_sahara": 235.0,
+  "median_arabia": 220.0,
+  "top10_iron": 10,
+  "top10_found": 9,
+  "over_1t": 54,
+  "under_100g_pct": 66.16,
+  "total_t": 605.3,
+  "top3_share": 27.79
+ },
+ "classes": {
+  "Ordinary chondrite": {
+   "group": "Ordinary chondrite",
+   "n": 39843,
+   "falls": 856,
+   "finds": 38987,
+   "falls_pct": 77.33,
+   "finds_pct": 87.4,
+   "ant_pct": 91.78,
+   "hot_pct": 80.93,
+   "rest_pct": 64.27
+  },
+  "Carbonaceous chondrite": {
+   "group": "Carbonaceous chondrite",
+   "n": 1584,
+   "falls": 44,
+   "finds": 1540,
+   "falls_pct": 3.97,
+   "finds_pct": 3.45,
+   "ant_pct": 3.34,
+   "hot_pct": 4.34,
+   "rest_pct": 1.39
+  },
+  "Other chondrite": {
+   "group": "Other chondrite",
+   "n": 688,
+   "falls": 19,
+   "finds": 669,
+   "falls_pct": 1.72,
+   "finds_pct": 1.5,
+   "ant_pct": 1.44,
+   "hot_pct": 1.55,
+   "rest_pct": 0.36
+  },
+  "Achondrite": {
+   "group": "Achondrite",
+   "n": 1837,
+   "falls": 81,
+   "finds": 1756,
+   "falls_pct": 7.32,
+   "finds_pct": 3.94,
+   "ant_pct": 2.56,
+   "hot_pct": 8.53,
+   "rest_pct": 1.31
+  },
+  "Lunar": {
+   "group": "Lunar",
+   "n": 165,
+   "falls": 0,
+   "finds": 165,
+   "falls_pct": 0.0,
+   "finds_pct": 0.37,
+   "ant_pct": 0.11,
+   "hot_pct": 1.2,
+   "rest_pct": 0.08
+  },
+  "Martian": {
+   "group": "Martian",
+   "n": 119,
+   "falls": 5,
+   "finds": 114,
+   "falls_pct": 0.45,
+   "finds_pct": 0.26,
+   "ant_pct": 0.07,
+   "hot_pct": 0.81,
+   "rest_pct": 0.08
+  },
+  "Stony-iron": {
+   "group": "Stony-iron",
+   "n": 281,
+   "falls": 11,
+   "finds": 270,
+   "falls_pct": 0.99,
+   "finds_pct": 0.61,
+   "ant_pct": 0.2,
+   "hot_pct": 1.08,
+   "rest_pct": 2.63
+  },
+  "Iron": {
+   "group": "Iron",
+   "n": 1068,
+   "falls": 49,
+   "finds": 1019,
+   "falls_pct": 4.43,
+   "finds_pct": 2.28,
+   "ant_pct": 0.47,
+   "hot_pct": 1.51,
+   "rest_pct": 26.98
+  },
+  "Relict or unclassified": {
+   "group": "Relict or unclassified",
+   "n": 130,
+   "falls": 42,
+   "finds": 88,
+   "falls_pct": 3.79,
+   "finds_pct": 0.2,
+   "ant_pct": 0.03,
+   "hot_pct": 0.05,
+   "rest_pct": 2.9
+  }
+ },
+ "classes_list": [
+  {
+   "group": "Ordinary chondrite",
+   "n": 39843,
+   "falls": 856,
+   "finds": 38987,
+   "falls_pct": 77.33,
+   "finds_pct": 87.4,
+   "ant_pct": 91.78,
+   "hot_pct": 80.93,
+   "rest_pct": 64.27
+  },
+  {
+   "group": "Carbonaceous chondrite",
+   "n": 1584,
+   "falls": 44,
+   "finds": 1540,
+   "falls_pct": 3.97,
+   "finds_pct": 3.45,
+   "ant_pct": 3.34,
+   "hot_pct": 4.34,
+   "rest_pct": 1.39
+  },
+  {
+   "group": "Other chondrite",
+   "n": 688,
+   "falls": 19,
+   "finds": 669,
+   "falls_pct": 1.72,
+   "finds_pct": 1.5,
+   "ant_pct": 1.44,
+   "hot_pct": 1.55,
+   "rest_pct": 0.36
+  },
+  {
+   "group": "Achondrite",
+   "n": 1837,
+   "falls": 81,
+   "finds": 1756,
+   "falls_pct": 7.32,
+   "finds_pct": 3.94,
+   "ant_pct": 2.56,
+   "hot_pct": 8.53,
+   "rest_pct": 1.31
+  },
+  {
+   "group": "Lunar",
+   "n": 165,
+   "falls": 0,
+   "finds": 165,
+   "falls_pct": 0.0,
+   "finds_pct": 0.37,
+   "ant_pct": 0.11,
+   "hot_pct": 1.2,
+   "rest_pct": 0.08
+  },
+  {
+   "group": "Martian",
+   "n": 119,
+   "falls": 5,
+   "finds": 114,
+   "falls_pct": 0.45,
+   "finds_pct": 0.26,
+   "ant_pct": 0.07,
+   "hot_pct": 0.81,
+   "rest_pct": 0.08
+  },
+  {
+   "group": "Stony-iron",
+   "n": 281,
+   "falls": 11,
+   "finds": 270,
+   "falls_pct": 0.99,
+   "finds_pct": 0.61,
+   "ant_pct": 0.2,
+   "hot_pct": 1.08,
+   "rest_pct": 2.63
+  },
+  {
+   "group": "Iron",
+   "n": 1068,
+   "falls": 49,
+   "finds": 1019,
+   "falls_pct": 4.43,
+   "finds_pct": 2.28,
+   "ant_pct": 0.47,
+   "hot_pct": 1.51,
+   "rest_pct": 26.98
+  },
+  {
+   "group": "Relict or unclassified",
+   "n": 130,
+   "falls": 42,
+   "finds": 88,
+   "falls_pct": 3.79,
+   "finds_pct": 0.2,
+   "ant_pct": 0.03,
+   "hot_pct": 0.05,
+   "rest_pct": 2.9
+  }
+ ],
+ "classes_top": [
+  {
+   "cls": "L6",
+   "n": 8285
+  },
+  {
+   "cls": "H5",
+   "n": 7142
+  },
+  {
+   "cls": "L5",
+   "n": 4796
+  },
+  {
+   "cls": "H6",
+   "n": 4528
+  },
+  {
+   "cls": "H4",
+   "n": 4211
+  },
+  {
+   "cls": "LL5",
+   "n": 2766
+  },
+  {
+   "cls": "LL6",
+   "n": 2043
+  },
+  {
+   "cls": "L4",
+   "n": 1253
+  },
+  {
+   "cls": "H4/5",
+   "n": 428
+  },
+  {
+   "cls": "CM2",
+   "n": 416
+  }
+ ],
+ "mars_moon": {
+  "martian": 119,
+  "lunar": 165,
+  "martian_falls": 5,
+  "lunar_falls": 0,
+  "desert_ice_pct": 95.42
+ },
+ "spot": {
+  "Nogata": {
+   "y": 860,
+   "fall": "Fell",
+   "cls": "L6",
+   "mass_g": 472.0,
+   "country": "Japan",
+   "lat": 33.725,
+   "lon": 130.75,
+   "id": 16988
+  },
+  "Ensisheim": {
+   "y": 1491,
+   "fall": "Fell",
+   "cls": "LL6",
+   "mass_g": 127000.0,
+   "country": "France",
+   "lat": 47.8667,
+   "lon": 7.35,
+   "id": 10039
+  },
+  "Wold Cottage": {
+   "y": 1795,
+   "fall": "Fell",
+   "cls": "L6",
+   "mass_g": 25000.0,
+   "country": "United Kingdom",
+   "lat": 54.1367,
+   "lon": -0.4133,
+   "id": 24325
+  },
+  "L'Aigle": {
+   "y": 1803,
+   "fall": "Fell",
+   "cls": "L6",
+   "mass_g": 37000.0,
+   "country": "France",
+   "lat": 48.7667,
+   "lon": 0.6333,
+   "id": 12434
+  },
+  "Sikhote-Alin": {
+   "y": 1947,
+   "fall": "Fell",
+   "cls": "Iron, IIAB",
+   "mass_g": 23000000.0,
+   "country": "Russia",
+   "lat": 46.16,
+   "lon": 134.6533,
+   "id": 23593
+  },
+  "Allende": {
+   "y": 1969,
+   "fall": "Fell",
+   "cls": "CV3",
+   "mass_g": 2000000.0,
+   "country": "Mexico",
+   "lat": 26.9667,
+   "lon": -105.3167,
+   "id": 2278
+  },
+  "Murchison": {
+   "y": 1969,
+   "fall": "Fell",
+   "cls": "CM2",
+   "mass_g": 100000.0,
+   "country": "Australia",
+   "lat": -36.6167,
+   "lon": 145.2,
+   "id": 16875
+  },
+  "Peekskill": {
+   "y": 1992,
+   "fall": "Fell",
+   "cls": "H6",
+   "mass_g": 12570.0,
+   "country": "United States",
+   "lat": 41.2833,
+   "lon": -73.9167,
+   "id": 18782
+  },
+  "Chelyabinsk": {
+   "y": 2013,
+   "fall": "Fell",
+   "cls": "LL5",
+   "mass_g": 100000.0,
+   "country": "Russia",
+   "lat": 54.8167,
+   "lon": 61.1167,
+   "id": 57165
+  },
+  "Almahata Sitta": {
+   "y": 2008,
+   "fall": "Fell",
+   "cls": "Ureilite-an",
+   "mass_g": 3950.0,
+   "country": "Sudan",
+   "lat": 20.7458,
+   "lon": 32.4128,
+   "id": 48915
+  },
+  "Tissint": {
+   "y": 2011,
+   "fall": "Fell",
+   "cls": "Martian (shergottite)",
+   "mass_g": 7000.0,
+   "country": "Morocco",
+   "lat": 29.482,
+   "lon": -7.6112,
+   "id": 54823
+  },
+  "Barwell": {
+   "y": 1965,
+   "fall": "Fell",
+   "cls": "L5",
+   "mass_g": 44000.0,
+   "country": "United Kingdom",
+   "lat": 52.5653,
+   "lon": -1.3397,
+   "id": 4954
+  },
+  "Jilin": {
+   "y": 1976,
+   "fall": "Fell",
+   "cls": "H5",
+   "mass_g": 4000000.0,
+   "country": "China",
+   "lat": 44.05,
+   "lon": 126.1667,
+   "id": 12171
+  },
+  "Hoba": {
+   "y": 1920,
+   "fall": "Found",
+   "cls": "Iron, IVB",
+   "mass_g": 60000000.0,
+   "country": "Namibia",
+   "lat": -19.5833,
+   "lon": 17.9167,
+   "id": 11890
+  },
+  "Cape York": {
+   "y": 1818,
+   "fall": "Found",
+   "cls": "Iron, IIIAB",
+   "mass_g": 58200000.0,
+   "country": "Greenland",
+   "lat": 76.1333,
+   "lon": -64.9333,
+   "id": 5262
+  },
+  "Campo del Cielo": {
+   "y": 1575,
+   "fall": "Found",
+   "cls": "Iron, IAB-MG",
+   "mass_g": 50000000.0,
+   "country": "Argentina",
+   "lat": -27.4667,
+   "lon": -60.5833,
+   "id": 5247
+  },
+  "Willamette": {
+   "y": 1902,
+   "fall": "Found",
+   "cls": "Iron, IIIAB",
+   "mass_g": 15500000.0,
+   "country": "United States",
+   "lat": 45.3667,
+   "lon": -122.5833,
+   "id": 24269
+  },
+  "Adelie Land": {
+   "y": 1912,
+   "fall": "Found",
+   "cls": "L5",
+   "mass_g": 1000.0,
+   "country": "Antarctica",
+   "lat": -67.1833,
+   "lon": 142.3833,
+   "id": 378
+  },
+  "Allan Hills 84001": {
+   "y": 1984,
+   "fall": "Found",
+   "cls": "Martian (OPX)",
+   "mass_g": 1930.9,
+   "country": "Antarctica",
+   "lat": -76.9203,
+   "lon": 156.7736,
+   "id": 604
+  }
+ },
+ "uk": {
+  "falls": 19,
+  "finds": 4
+ },
+ "meta": {
+  "page": "https://maps.tristanhotham.com/meteorite-falls/",
+  "repo": "https://github.com/Tristan-Hotham/meteorite-falls",
+  "doi": "10.5281/zenodo.23847548",
+  "blog": "https://blog.tristanhotham.com/2026/10/31/meteorite-falls/",
+  "retrieved": "2026",
+  "slug": "meteorite-falls",
+  "boxes": {
+   "Sahara": [
+    -17.5,
+    15,
+    34,
+    34
+   ],
+   "Arabia": [
+    35,
+    12,
+    60,
+    31
+   ],
+   "Atacama": [
+    -71.5,
+    -30,
+    -68,
+    -18
+   ],
+   "Australian deserts": [
+    117,
+    -32.5,
+    141,
+    -19
+   ]
+  }
+ }
+}
