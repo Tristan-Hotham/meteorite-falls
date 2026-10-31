@@ -1,0 +1,163 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\newfontfamily\headfont{Inter}[UprightFont=*-ExtraBold,BoldFont=*-ExtraBold,Extension=.otf,Path=/usr/share/fonts/opentype/inter/]
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{graphicx,booktabs,float,caption,array,xcolor,longtable}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage[round]{natbib}
+\usepackage{setspace}
+\setstretch{1.05}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\titleformat{\section}{\headfont\Large}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\headfont\large}{\thesubsection}{0.8em}{}
+\captionsetup{font=small,labelfont=bf}
+\urlstyle{same}
+\hypersetup{pdftitle={Where Space Rocks Land},pdfauthor={Tristan Hotham}}
+
+\begin{document}
+\begin{center}
+{\Large\bfseries Where Space Rocks Land\par}
+\vspace{0.4em}
+{\large Falls, finds and the geography of the meteorite record:\\{{source.n|int}} meteorites in the Meteoritical Bulletin, via NASA\par}
+\vspace{1.2em}
+{\large Tristan Hotham\par}
+\vspace{0.3em}
+{\small Independent researcher\\
+ORCID: 0000-0003-4931-9349\\
+DOI: \href{https://doi.org/{{meta.doi}}}{https://doi.org/{{meta.doi}}}\par}
+\vspace{0.8em}
+2026
+\end{center}
+
+\begin{quote}
+\small
+\begin{center}\textbf{Abstract}\end{center}
+Meteorites reach the ground at a rate that is close to uniform over the Earth, but the catalogue of known meteorites is anything but uniform. I map the {{source.n|int}} meteorites recovered on Earth in NASA's copy of the Meteoritical Society's Meteoritical Bulletin Database (records to {{source.last_year|raw}}), and separate the {{source.falls|int}} witnessed falls ({{source.falls_pct|pc1}}) from the {{source.finds|int}} finds. Finds are dominated by places where meteorites are easy to see and slow to weather: {{regions.Antarctica.pct|pc}} of all records come from Antarctica and {{hot.pct|pc}} from hot deserts (the Sahara {{regions.Sahara.pct|pc}}, Arabia {{regions.Arabia.pct|pc}}), so that ice and desert together account for {{icedesert.pct|pc}} of the record, almost all of it collected since 1969. Witnessed falls behave differently: none is recorded in Antarctica, where an even spread would predict about {{continents.Antarctica.expected|int}}, and {{rest.falls_pct|pc}} fall outside the ice and desert collection areas. Compared with an even spread over the land, Europe records {{continents.Europe.ratio|f1}} times its share of falls, Africa {{continents.Africa.ratio|f1}}, South America {{continents.South America.ratio|f1}} and Oceania {{continents.Oceania.ratio|f1}}; Japan, Italy, France, Germany and the United Kingdom each record more than ten times their share. Across countries, falls per unit area rise with population density (correlation on log scales {{countries.pearson_log|f2}}). Witnessed falls grew from {{falls_time.d1800|int}} in the 1800s to a peak of {{falls_time.peak_n|int}} in the {{falls_time.peak_dec|raw}}s and have since levelled at about {{falls_time.since1950_mean|int}} a decade. The heaviest meteorites (Hoba, Cape York, Campo del Cielo) are all iron finds, and irons make up {{classes.Iron.rest_pct|pc}} of finds outside ice and desert against {{classes.Iron.falls_pct|pc1}} of falls. The map of meteorites is, above all, a map of where people have looked.
+
+\textbf{Keywords:} meteorites; meteorite falls; Antarctic meteorites; hot desert meteorites; sampling bias; Meteoritical Bulletin; open data; mapping
+\end{quote}
+
+\section{Introduction}
+Rocks from space have been falling on the Earth throughout its history, and a few of them have always been seen. The stone that fell at Ensisheim in Alsace in the 1490s was chained up in the parish church; the shower at L'Aigle in Normandy in 1803, investigated by Jean-Baptiste Biot, persuaded the scientific world that stones really do fall from the sky \citep{burke}. Since then the number of known meteorites has grown from a few hundred to tens of thousands, and the Meteoritical Society keeps the official list of names, the Meteoritical Bulletin Database \citep{metbull}.
+
+Most of that growth did not come from new falls. It came from two discoveries about where meteorites survive and can be seen. In 1969 a Japanese expedition found nine meteorites on the bare ice near the Yamato Mountains in Antarctica \citep{yoshida}, and it soon became clear that the slow flow of the ice sheet carries meteorites to blue ice areas where wind and sublimation expose them \citep{harvey}. From the 1980s, searchers and commercial hunters in the Sahara and later in Oman found that hot deserts, with their dry, stable surfaces, preserve meteorites for tens of thousands of years and display them as dark stones on pale ground \citep{bland}.
+
+The result is a catalogue whose map looks like a map of meteorites but is really a map of searching. This paper quantifies that, using the copy of the database that NASA publishes as open data \citep{nasa}. It asks how much of the record comes from ice and desert, how witnessed falls (which do not depend on searching) compare with an even spread over the land, and how both have changed over time. It pairs the analysis with an interactive map (\url{{{meta.page}}}).
+
+\section{Data}
+\textbf{Meteorites.} NASA's ``Meteorite Landings'' table, compiled from the Meteoritical Bulletin Database, gives for each meteorite its name, identifier (the Bulletin's code), whether the name is valid or relict, its class, total recovered mass, whether it was seen to fall (``Fell'') or found (``Found''), a year, and coordinates. The table has {{source.n_rows|int}} rows and its latest records are from {{source.last_year|raw}} ({{source.n_last_year|int}} that year); the live Bulletin has grown considerably since, so the counts here describe the catalogue to {{source.last_year|raw}}. NASA's portal could not be reached from the build environment, so I used a copy mirrored on GitHub and checked it cell by cell against a second, independent GitHub mirror and a third, five-column copy. The two full copies agree on every name, class, fall status, mass and coordinate; the only differences are three archaeological finds (Havana, Ur and Wietrzno-Bobrka) that have no year in the first copy and an implausible year in the second, which I leave without a year. The data are NASA open data; I credit the Meteoritical Society and NASA throughout.
+
+\textbf{Geography and population.} Natural Earth \citep{naturalearth} country outlines (1:10m for point in polygon and areas, 1:50m for display), with each country's land area computed as a geodesic area on the WGS84 ellipsoid, and Natural Earth's recent population estimate (POP\_EST), which I use only as a rough guide. World population for the 1960s and 2000s is from the World Bank \citep{worldbank}.
+
+{{TABLE_REGIONS}}
+
+\section{Methods}
+\subsection{Cleaning}
+Years are stored as 1 January of the year and are used as years. One record, Northwest Africa 7701, is given the year 2101 and is set to missing. One record, Meridiani Planum, was found on Mars by the Opportunity rover; it is kept in the data with a flag and left out of everything else, leaving {{source.n|int}} meteorites recovered on Earth. Coordinates that are missing ({{source.coords_missing|int}} records) or exactly 0°, 0° ({{source.coords_zero|int}}) are treated as unknown; together {{source.unlocated|int}} records cannot be placed on a map. Most of these are desert meteorites bought from dealers and named only for a broad area: {{source.nwa_unlocated|int}} of the {{source.nwa|int}} meteorites named ``Northwest Africa'' have no point.
+
+\subsection{Recovery regions}
+Each meteorite with a point is assigned to a region: Antarctica (south of 60°S); the Sahara (a box from 15°N to 34°N and 17.5°W to 34°E); Arabia (12°N to 31°N, 35°E to 60°E); other hot deserts (the Atacama, 30°S to 18°S and 71.5°W to 68°W, and the Australian deserts including the Nullarbor, 32.5°S to 19°S and 117°E to 141°E); and the rest of the world. The boxes are deliberately simple and include some non-desert land, but very few meteorites there. Meteorites without a point take the region of their collection area, the part of the name before the number (``Yamato'' in Yamato 791197), if at least three of that area's meteorites have a point and at least 80\% of those share one region. This places {{source.region_from_name|int}} more records; {{regions.Not known.n|int}} remain unknown. Present-day countries come from Natural Earth by point in polygon.
+
+\subsection{Broad classes}
+The {{source.n_classes|int}} recorded classes are grouped into ordinary chondrites (H, L, LL and mixtures), carbonaceous chondrites (C groups), other chondrites (enstatite, R, K and ungrouped), achondrites (HED, ureilites, aubrites and other differentiated stones, excluding lunar and Martian), lunar, Martian, stony-irons (pallasites and mesosiderites), irons, and relict or unclassified.
+
+\subsection{An even spread}
+The flux of meteorites reaching the ground varies little over the Earth's surface; camera networks and desert surveys put it in the thousands to tens of thousands of stones above 10 g a year \citep{halliday,bland}. If every fall on land were noticed and reported, each country's share of witnessed falls would equal its share of the land area. For the {{countries.falls_land|int}} witnessed falls with a country, I compute each country's expected falls as that total times its share of the {{countries.land_m_km2|f1}} million km\textsuperscript{2} of land in Natural Earth (Antarctica included), and report observed divided by expected. Latitude effects, and the roughly {{ocean.falls_per_land|f1}} falls into the sea for every one on land, are ignored.
+
+\section{Results}
+\subsection{Falls and finds}
+Witnessed falls are {{source.falls|int}} of {{source.n|int}} records ({{source.falls_pct|pc1}}). Table~\ref{tab:reg} and Figure~\ref{fig:reg} show where the rest come from. Antarctica has {{regions.Antarctica.n|int}} meteorites ({{regions.Antarctica.pct|pc}}), the Sahara {{regions.Sahara.n|int}} ({{regions.Sahara.pct|pc}}), Arabia {{regions.Arabia.n|int}} ({{regions.Arabia.pct|pc}}), most of them from Oman, and the Atacama and Australian deserts {{regions.Other hot deserts.n|int}}. The rest of the world contributes {{regions.Rest of the world.n|int}} ({{regions.Rest of the world.pct|pc}}). Among finds alone, ice and desert account for {{icedesert.finds_pct|pc}}. Witnessed falls invert the picture: {{rest.falls_pct|pc}} are in the rest of the world, {{hot.falls|int}} in the hot desert boxes, and none in Antarctica.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_regions.png}
+\caption{Share of meteorites by recovery region: all records, finds and witnessed falls.}\label{fig:reg}\end{figure}
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_maps.png}
+\caption{Witnessed falls (top) and finds (bottom) with a point, in the Equal Earth projection. Finds are aggregated into half-degree squares, with circle area growing with the count; the inset shows Antarctica from above.}\label{fig:maps}\end{figure}
+
+Figure~\ref{fig:maps} maps both. The finds concentrate in a few dozen places, because a meteorite takes its name, and often its coordinates, from its collection area: the ten largest areas hold {{areas_top_share|pc}} of the record (Table~\ref{tab:areas}), and thousands of Antarctic meteorites share a single point per ice field (Figure~\ref{fig:ant}). Many of these are fragments of the same fall, named separately until they are paired, so the counts overstate the number of distinct falls.
+
+{{TABLE_AREAS}}
+
+\begin{figure}[tbp]\centering\includegraphics[width=.72\textwidth]{f_antarctica.png}
+\caption{Antarctic finds by half-degree square, south polar stereographic projection. Circle area grows with the number of meteorites.}\label{fig:ant}\end{figure}
+
+\subsection{The rush after 1969}
+Before 1969 the Antarctic record held {{antarctic.pre1969|int}} meteorites besides the first, {{antarctic.first.name|raw}} ({{antarctic.first.y|raw}}). The Yamato discovery of {{antarctic.yamato.y|raw}} ({{antarctic.yamato.n_first|int}} meteorites that year; {{antarctic.yamato.n|int}} now carry the name) opened systematic recovery by Japanese and American programmes, and Saharan and Omani finds followed from the 1980s and 1990s. Finds per decade peak in the {{finds_time.peak_dec|raw}}s at {{finds_time.peak_n|int}}, and {{finds_time.since1970_pct|pc}} of dated finds are from 1970 or later (Figure~\ref{fig:dec}).
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_decades.png}
+\caption{Finds per decade by recovery region (bars, left scale) and witnessed falls per decade (line, right scale). The 2010s run only to 2013 (hollow point).}\label{fig:dec}\end{figure}
+
+Witnessed falls follow a different curve: {{falls_time.d1800|int}} in the 1800s, {{falls_time.d1860|int}} in the 1860s and a peak of {{falls_time.peak_n|int}} in the {{falls_time.peak_dec|raw}}s, after which they settle at about {{falls_time.since1950_mean|int}} a decade. The rise through the nineteenth century fits growing populations, literacy, newspapers and scientific interest in collecting falls. The plateau since 1950 is harder to explain with population alone: the world's population grew by {{falls_time.pop_growth_pct|int}}\% between the 1960s and the 2000s, while recorded falls changed by {{falls_time.falls_change_pct|f1}}\%. Part of the explanation may be the lag between a fall and its approval in the Bulletin, part the growth of populations in regions with fewer museums and meteorite scientists. There are {{falls_time.pre1800|int}} falls before 1800, the oldest Nogata in Japan (dated {{falls_time.oldest.0.y|raw}} in the data) and Narni in Italy ({{falls_time.oldest.1.y|raw}}).
+
+\subsection{Witnessed falls against an even spread}
+Table~\ref{tab:cont} and Figure~\ref{fig:cont} compare witnessed falls with an even spread by continent. Europe, with {{continents.Europe.area_pct|f1}}\% of the land and {{continents.Europe.pop_pct|f1}}\% of today's population, has {{continents.Europe.falls_pct|f1}}\% of the falls, {{continents.Europe.ratio|f1}} times its share. Asia records {{continents.Asia.ratio|f1}} times, North America {{continents.North America.ratio|f2}}, Africa {{continents.Africa.ratio|f2}}, South America {{continents.South America.ratio|f2}}, Oceania {{continents.Oceania.ratio|f2}} and Antarctica none of an expected {{continents.Antarctica.expected|f1}}.
+
+{{TABLE_CONT}}
+
+\begin{figure}[tbp]\centering\includegraphics[width=.9\textwidth]{f_continents.png}
+\caption{Witnessed falls by continent (bars) against the number expected from land area (ticks).}\label{fig:cont}\end{figure}
+
+By country (Figure~\ref{fig:ratio}), the United States ({{countries.USA.falls|int}}) and India ({{countries.IND.falls|int}}) have the most falls. Relative to land area, Japan records {{countries.JPN.ratio|f1}} times its share ({{countries.JPN.falls|int}} falls against {{countries.JPN.expected|f1}} expected), Italy {{countries.ITA.ratio|f1}}, France {{countries.FRA.ratio|f1}}, Germany {{countries.DEU.ratio|f1}} and the United Kingdom {{countries.GBR.ratio|f1}} ({{countries.GBR.falls|int}} falls); India {{countries.IND.ratio|f1}}. Large, thinly populated or dry countries record far fewer: Canada {{countries.CAN.falls|int}} of {{countries.CAN.expected|f1}} expected, Australia {{countries.AUS.falls|int}} of {{countries.AUS.expected|f1}}, Brazil {{countries.BRA.falls|int}} of {{countries.BRA.expected|f1}}, Russia {{countries.RUS.ratio|f2}} times its share, and Libya, with {{countries.LBY.finds|int}} finds, {{countries.LBY.falls|int}} fall.
+
+\begin{figure}[tbp]\centering\includegraphics[width=.9\textwidth]{f_ratio.png}
+\caption{Witnessed falls divided by falls expected from land area. Top: highest ratios among countries with at least 1.5 falls expected. Bottom: lowest among countries with at least 10 expected.}\label{fig:ratio}\end{figure}
+
+{{TABLE_COUNTRIES}}
+
+Population density explains much of this (Figure~\ref{fig:people}). Across the {{countries.n_big|int}} countries of at least 20,000 km\textsuperscript{2}, Spearman's rank correlation between falls per km\textsuperscript{2} and people per km\textsuperscript{2} is {{countries.spearman|f2}}; among the {{countries.n_big_falls|int}} with at least one fall, the Pearson correlation of the logarithms is {{countries.pearson_log|f2}}. The scatter is wide. Europe and Japan sit above countries of similar density in South and Southeast Asia, Africa and Latin America, which points to history and institutions (long written records, a press that reported falls, museums and collectors who wanted the stones) as well as numbers of people. Population here is today's, not that at the time of each fall.
+
+\begin{figure}[tbp]\centering\includegraphics[width=.9\textwidth]{f_people.png}
+\caption{Falls per million km\textsuperscript{2} against people per km\textsuperscript{2}, countries of at least 20,000 km\textsuperscript{2} with at least one witnessed fall. Circle size grows with the number of falls.}\label{fig:people}\end{figure}
+
+\subsection{Mass and class}
+The heaviest meteorites are all iron and almost all finds (Table~\ref{tab:heavy}): Hoba in Namibia ({{heaviest.0.t|f1}} t), Cape York in Greenland ({{heaviest.1.t|f1}} t, recovered in several pieces) and Campo del Cielo in Argentina ({{heaviest.2.t|f1}} t). These three alone are {{mass.top3_share|pc}} of all recorded mass. The heaviest witnessed fall is Sikhote-Alin in 1947 ({{heaviest_falls.0.t|f1}} t), followed by Jilin ({{heaviest_falls.1.t|f1}} t, 1976) and Allende ({{heaviest_falls.2.t|f1}} t, 1969).
+
+{{TABLE_HEAVY}}
+
+Antarctic meteorites are small: the median Antarctic find weighs {{mass.median_ant|f1}} g against {{mass.median_sahara|int}} g in the Sahara, {{mass.median_rest_find|int}} g for finds elsewhere and {{mass.median_fall|int}} g for witnessed falls (Figure~\ref{fig:mass}). On ice or sand a small dark stone is visible; in fields and forests only large or unusual ones are noticed.
+
+\begin{figure}[tbp]\centering\includegraphics[width=.9\textwidth]{f_mass.png}
+\caption{Distribution of recovered mass by group (meteorites with a point and a recorded mass).}\label{fig:mass}\end{figure}
+
+The same visibility filter shows in the classes (Figure~\ref{fig:cls}). Irons are {{classes.Iron.falls_pct|pc1}} of witnessed falls, close to their share of what arrives, but {{classes.Iron.rest_pct|pc1}} of finds outside ice and desert, because they resist weathering, look unlike local rock and set off metal detectors. On ice and in deserts the mix of finds is close to that of falls and dominated by ordinary chondrites ({{classes.Ordinary chondrite.ant_pct|pc}} of Antarctic finds and {{classes.Ordinary chondrite.hot_pct|pc}} of hot desert finds, against {{classes.Ordinary chondrite.falls_pct|pc}} of falls). The rarest stones also come from ice and desert: of {{mars_moon.martian|int}} Martian and {{mars_moon.lunar|int}} lunar meteorites, {{mars_moon.desert_ice_pct|pc}} were recovered there.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_classes.png}
+\caption{Broad class shares among witnessed falls, Antarctic finds, hot desert finds and finds elsewhere.}\label{fig:cls}\end{figure}
+
+\section{Discussion}
+None of this is new to meteoriticists, who have long known that the record is shaped by recovery \citep{harvey,bland}. What a simple map adds is a sense of scale. Almost nine in ten known meteorites come from ice or desert, and the remainder, together with the witnessed falls, are distributed much more like people than like the sky. The witnessed falls are the closest thing in the catalogue to a fair sample of what arrives, and even they are many times denser in Japan or western Europe than in Canada, Brazil or Australia.
+
+For readers of the map, the practical lesson is to ask of any cluster whether it reflects a place where meteorites land or a place where people looked, wrote down what they saw and kept the stones.
+
+\section{Limitations}
+First, the NASA table ends in {{source.last_year|raw}} and does not include the many meteorites approved since. Second, finds have only a year of finding, not of falling. Third, many Antarctic and desert records are paired fragments of a single fall, so counts are of named meteorites, not falls. Fourth, {{source.unlocated|int}} records have no point; I place most of them by collection area, which assumes that the area's located meteorites are representative. Fifth, the desert boxes are coarse rectangles. Sixth, population is a recent estimate and areas are present-day countries, which suits neither historical falls nor changing borders. Finally, the comparison with an even spread ignores small variations in flux with latitude.
+
+\section{Conclusion}
+The Meteoritical Society's catalogue is one of the great collaborative scientific records, and NASA's open copy makes its geography easy to see. That geography tells us more about people than about meteorites: where the ice and sand make stones easy to find, and where enough people, records and institutions turned a flash in the sky into a named stone in a museum.
+
+\section*{Data and code availability}
+The interactive map is at \url{{{meta.page}}}. Data and code are at \url{{{meta.repo}}} and archived with this paper at \url{https://doi.org/{{meta.doi}}}. Derived data are released under CC BY 4.0 and code under the MIT licence. Meteorite data: The Meteoritical Society, Meteoritical Bulletin Database, via NASA's Open Data Portal.
+
+\section*{AI statement}
+I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.
+
+\begin{thebibliography}{9}
+\bibitem[Bland et al.(1996)]{bland} Bland, P. A. et al. (1996) The flux of meteorites to the Earth over the last 50,000 years. \emph{Monthly Notices of the Royal Astronomical Society}, 283, 551 to 565.
+\bibitem[Burke(1986)]{burke} Burke, J. G. (1986) \emph{Cosmic Debris: Meteorites in History}. Berkeley: University of California Press.
+\bibitem[Halliday et al.(1989)]{halliday} Halliday, I., Blackwell, A. T. and Griffin, A. A. (1989) The flux of meteorites on the Earth's surface. \emph{Meteoritics}, 24, 173 to 178.
+\bibitem[Harvey(2003)]{harvey} Harvey, R. (2003) The origin and significance of Antarctic meteorites. \emph{Chemie der Erde}, 63, 93 to 147.
+\bibitem[Meteoritical Society(2026)]{metbull} The Meteoritical Society (2026) Meteoritical Bulletin Database. \url{https://www.lpi.usra.edu/meteor/}
+\bibitem[NASA(2026)]{nasa} NASA Open Data Portal (2026) Meteorite Landings (dataset gh4g-9sfh), compiled from the Meteoritical Bulletin Database. \url{https://data.nasa.gov/}
+\bibitem[Natural Earth(2026)]{naturalearth} Natural Earth (2026) Admin 0 countries and populated places. Public domain. \url{https://www.naturalearthdata.com/}
+\bibitem[World Bank(2026)]{worldbank} World Bank (2026) Population, total (SP.POP.TOTL). CC BY 4.0. \url{https://data.worldbank.org/}
+\bibitem[Yoshida et al.(1971)]{yoshida} Yoshida, M. et al. (1971) Discovery of meteorites near Yamato Mountains, East Antarctica. \emph{Antarctic Record}, 39, 62 to 65.
+\end{thebibliography}
+\end{document}

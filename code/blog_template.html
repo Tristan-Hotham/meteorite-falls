@@ -1,0 +1,133 @@
+<!-- wp:paragraph -->
+<p><em>Space rocks land everywhere, more or less evenly. So why do two thirds of known meteorites come from Antarctica? I mapped {{source.n|int}} of them, from the Meteoritical Society's catalogue as NASA publishes it, and found that the map tells you far more about people than about the sky.</em></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://maps.tristanhotham.com/meteorite-falls/">Explore the interactive version</a></div>
+<!-- /wp:button -->
+<!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://doi.org/10.5281/zenodo.23847548">Read the paper</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
+
+<!-- wp:paragraph -->
+<p>Every day, somewhere on Earth, a rock from space hits the ground. Most land in the sea, in forests or on farmland, and nobody ever knows. A few are seen as fireballs and tracked down: those are "falls". Many more are simply picked up later by someone who noticed an odd, heavy, dark stone: those are "finds". The Meteoritical Society keeps the official list, and NASA publishes a copy with the place, year, class and weight of each one. Up to {{source.last_year|raw}} it holds {{source.n|int}} meteorites recovered on Earth.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Only {{source.falls|int}} of them, {{source.falls_pct|pc1}}, were seen to fall. Put the falls and the finds on two maps and they look like two different planets.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_maps.png|Two world maps. The top map shows witnessed falls as orange dots, crowded across Europe, India, Japan, eastern China and the eastern United States, sparse in Africa, South America and Australia, and absent from Antarctica. The bottom map shows finds as circles, with huge blue clusters on the Antarctic ice, dense orange clusters across the Sahara, purple in Oman, tan in the Atacama and southern Australia, and grey scattered over the American Midwest|Witnessed falls (top) and finds (bottom). Finds are grouped into half-degree squares; the inset shows Antarctica from above.}}
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Ice and sand</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Antarctica alone accounts for {{regions.Antarctica.n|int}} meteorites, {{regions.Antarctica.pct|pc}} of the whole record. The Sahara adds {{regions.Sahara.pct|pc}} and Arabia, mostly Oman, {{regions.Arabia.pct|pc}}. Add the Atacama and the Australian deserts and {{icedesert.pct|pc}} of all known meteorites come from ice or desert. The whole rest of the world, every field, forest and town, supplies {{regions.Rest of the world.pct|pc}}.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_regions.png|Three horizontal bars split by region. All records and finds are about two thirds blue for Antarctica, with orange for the Sahara and purple for Arabia; the witnessed falls bar is almost entirely grey for the rest of the world|Where the record comes from: all meteorites, finds, and witnessed falls.}}
+
+<!-- wp:paragraph -->
+<p>There is nothing special about the sky over Antarctica. What is special is the ground. The ice sheet flows slowly towards the mountains, carrying meteorites that fell over tens of thousands of years, and where it is blocked and the wind strips the surface away, it leaves them lying on bare blue ice. A dark stone on blue ice is about the easiest thing in the world to spot. Deserts work in a similar way: almost no rain to rot the stones, and a pale, stable surface to show them off.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>That also makes Antarctic meteorites small. The median one weighs {{mass.median_ant|f1}} g, the median Saharan one {{mass.median_sahara|int}} g, and the median find from anywhere else {{mass.median_rest_find|int}} g. In a ploughed field you would never notice a stone the size of a grape. On ice, people collect them by the thousand.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The great meteorite rush</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>For most of history the record grew slowly. The first Antarctic meteorite turned up in {{antarctic.first.y|raw}}, and only {{antarctic.pre1969|int}} more followed before {{antarctic.yamato.y|raw}}, when a Japanese team found {{antarctic.yamato.n_first|int}} on the ice near the Yamato Mountains and realised what the ice was doing. Searches have run every season since. Today {{antarctic.yamato.n|int}} meteorites carry the name Yamato. From the 1980s hunters began combing the Sahara and Oman too, and the finds peaked in the {{finds_time.peak_dec|raw}}s, at {{finds_time.peak_n|int}} in a single decade.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_decades.png|Stacked bar chart of finds per decade from the 1800s to the 2010s: almost nothing until the 1960s, then a sudden wall of blue Antarctic finds in the 1970s rising to over 17,000 in the 2000s with orange Saharan and purple Arabian finds on top. An orange line of witnessed falls rises from under 20 a decade in the 1800s to a peak of 91 in the 1930s, then stays near 60|Finds per decade by region (bars) and witnessed falls (line, right scale). The data end in 2013.}}
+
+<!-- wp:paragraph -->
+<p>Witnessed falls tell a gentler story. They rose from {{falls_time.d1800|int}} in the 1800s to a peak of {{falls_time.peak_n|int}} in the {{falls_time.peak_dec|raw}}s, as more people could read, newspapers reported fireballs and museums wanted the stones. Since 1950 they have held steady at about {{falls_time.since1950_mean|int}} a decade, even though the world's population roughly doubled between the 1960s and the 2000s.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:pullquote -->
+<figure class="wp-block-pullquote"><blockquote><p>A map of meteorites is really a map of where people have looked for them.</p></blockquote></figure>
+<!-- /wp:pullquote -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Falls follow people</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Witnessed falls should be the fair sample: nobody goes out searching for them. If every fall on land were spotted, each country would get falls in proportion to its area. Antarctica, {{continents.Antarctica.area_pct|pc}} of the land, would have about {{continents.Antarctica.expected|int}}. It has none. Europe has {{continents.Europe.ratio|f1}} times its share, Asia {{continents.Asia.ratio|f1}} and North America almost exactly its share; Africa gets {{continents.Africa.ratio|f1}}, South America {{continents.South America.ratio|f1}} and Oceania {{continents.Oceania.ratio|f1}}.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_continents.png|Horizontal bar chart of witnessed falls by continent with a black tick for the number expected from land area: Europe 374 against 171 expected, Asia 325 against 232, North America 183 against 181, Africa 141 against 223, South America 52 against 131, Oceania 19 against 63 and Antarctica 0 against 92|Witnessed falls by continent, against an even spread over the land.}}
+
+<!-- wp:paragraph -->
+<p>Country by country the gaps are bigger. Japan has {{countries.JPN.falls|int}} falls where its area predicts fewer than three, about {{countries.JPN.ratio|int}} times its share. Italy, France and Germany are each over ten times, and the United Kingdom {{countries.GBR.ratio|int}} times, with {{countries.GBR.falls|int}} falls. India, with {{countries.IND.falls|int}}, is the great exception outside Europe and North America. At the other end, Canada has {{countries.CAN.falls|int}} where {{countries.CAN.expected|int}} would be expected and Australia {{countries.AUS.falls|int}} against {{countries.AUS.expected|int}}. Libya, with {{countries.LBY.finds|int}} desert finds, has a single witnessed fall.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_ratio.png|Bar chart on a log scale of witnessed falls divided by expected falls. Japan, Italy, France, Germany and the UK all have over ten times their share, followed by Ukraine, Spain and India; at the bottom Antarctica and Greenland have none, and Libya, Iran, Canada, Australia and Mongolia have well under half their share|Witnessed falls compared with an even spread, country by country.}}
+
+<!-- wp:paragraph -->
+<p>More people per square kilometre means more falls per square kilometre: the correlation on a log scale is {{countries.pearson_log|f2}}. But it is loose, and history matters as much as headcount. Europe and Japan sit above countries just as crowded elsewhere, because they had centuries of written records, a press that reported fireballs, and collectors and museums who wanted the stones. (Population here is today's rough estimate, not the population when each stone fell.)</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_people.png|Scatter chart on log scales of people per square kilometre against witnessed falls per million square kilometres, one dot per country. The dots slope upwards: Mongolia, Canada and Australia at the bottom left, Japan, Italy, France, Germany and the UK at the top right, with India and Bangladesh dense but a little lower|Falls and people: each dot is a country larger than 20,000 km².}}
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">The giants are iron</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The heaviest meteorite on record is Hoba in Namibia, {{heaviest.0.t|f1}} tonnes, still lying where a farmer found it in {{heaviest.0.y|raw}}. Next come Cape York in Greenland ({{heaviest.1.t|f1}} t) and Campo del Cielo in Argentina ({{heaviest.2.t|f1}} t). All ten of the heaviest are iron. The heaviest witnessed fall is Sikhote-Alin in the Russian Far East, {{heaviest_falls.0.t|int}} tonnes of iron that came down in {{heaviest_falls.0.y|raw}}.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Iron is also the clearest sign of the searching effect. Irons are only {{classes.Iron.falls_pct|pc1}} of falls, but {{classes.Iron.rest_pct|pc}} of finds outside the ice and deserts: they rust slowly, look like nothing else in a field, and set off metal detectors. On ice and sand, where any dark stone stands out, the finds look much more like the falls.</p>
+<!-- /wp:paragraph -->
+
+{{IMG|b_classes.png|Four horizontal bars showing class shares. Falls, Antarctic finds and hot desert finds are mostly orange ordinary chondrites, but finds elsewhere have a large purple block of iron meteorites, 27 percent|What kind of meteorite, by how it was recovered.}}
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How I did this</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The data are NASA's Meteorite Landings table, compiled from the Meteoritical Society's Meteoritical Bulletin Database, which ends in {{source.last_year|raw}}. I used a copy mirrored on GitHub and checked it against a second, independent mirror: they match on every name, class, weight and coordinate. I left out one meteorite found on Mars by a rover. Records without a place ({{source.unlocated|int}}, mostly desert stones sold with only a broad name like "Northwest Africa") were assigned a region from the area in their name where possible. Antarctica is everything south of 60°S; the hot deserts are rough boxes around the Sahara, Arabia, the Atacama and the Australian deserts. To compare with an even spread I gave each country a share of the witnessed falls in proportion to its land area, Antarctica included. Many Antarctic and desert stones are fragments of the same fall, so the counts are of named meteorites, not separate falls. The paper sets out every step and caveat.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://maps.tristanhotham.com/meteorite-falls/">Explore the interactive version</a></div>
+<!-- /wp:button -->
+<!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://doi.org/10.5281/zenodo.23847548">Read the paper</a></div>
+<!-- /wp:button -->
+<!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://github.com/Tristan-Hotham/meteorite-falls">Data and code</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Notes and sources</h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>The Meteoritical Society, <a href="https://www.lpi.usra.edu/meteor/">Meteoritical Bulletin Database</a>, as published by NASA's <a href="https://data.nasa.gov/">Open Data Portal</a> ("Meteorite Landings"), via GitHub mirrors.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><a href="https://www.naturalearthdata.com/">Natural Earth</a> countries, populated places and population estimates (public domain); World Bank world population (CC BY 4.0).</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>On why Antarctica and deserts collect meteorites: Harvey (2003) in <em>Chemie der Erde</em>; Bland and colleagues (1996) in <em>Monthly Notices of the Royal Astronomical Society</em>.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li>I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->

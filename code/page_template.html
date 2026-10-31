@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Where Space Rocks Land</title>
+<meta name="description" content="An interactive map of {{source.n|int}} meteorites in the Meteoritical Society's record (via NASA): the {{source.falls|int}} people saw fall, the finds from Antarctic ice and hot deserts, and why the map shows where people look rather than where meteorites land.">
+<meta property="og:title" content="Where space rocks land, and why the record is so lumpy">
+<meta property="og:description" content="{{regions.Antarctica.pct|pc}} of known meteorites come from Antarctica and {{hot.pct|pc}} from hot deserts. Witnessed falls follow people instead: Japan, Italy, France and Germany record more than ten times their share.">
+<meta property="og:image" content="https://maps.tristanhotham.com/meteorite-falls/header.png">
+<meta property="og:url" content="https://maps.tristanhotham.com/meteorite-falls/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* Fireball: pale paper, fireball orange for witnessed falls, ice blue and desert ochre for finds. */
+:root{
+  --bg:#F6F4EF; --panel:#EAE7DF; --fg:#1D2128; --muted:#636A72; --rule:#DDD8CC; --card:#FFFEFA; --border:#CBC5B8;
+  --hot:#D4481A; --cool:#2F7FB8; --gold:#D98A1F; --ink:#2B3A55; --land:#E6E2D8; --sea:#EEF1F2;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151B; --panel:#1C2029; --fg:#ECEEF1; --muted:#A2A8B0; --rule:#30353F; --card:#171B22; --border:#444B57;
+  --hot:#FF7A45; --cool:#7DB7E6; --gold:#F2B54E; --ink:#A9BBDD; --land:#232831; --sea:#161A20; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151B; --panel:#1C2029; --fg:#ECEEF1; --muted:#A2A8B0; --rule:#30353F; --card:#171B22; --border:#444B57;
+  --hot:#FF7A45; --cool:#7DB7E6; --gold:#F2B54E; --ink:#A9BBDD; --land:#232831; --sea:#161A20; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 18px/1.62 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+.wrap{max-width:700px;margin:0 auto;padding-block:28px 64px}
+.wrap .bleed{width:min(1180px,calc(100vw - 32px));margin-left:calc((100% - min(1180px,100vw - 32px))/2);margin-right:0}
+a{color:inherit;text-decoration-color:var(--hot);text-underline-offset:3px}
+.kicker{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.kicker b{background:var(--ink);color:#fff;padding:5px 8px;font-weight:500}
+header.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;align-items:end;border-bottom:6px double var(--fg);padding-bottom:22px;margin-top:18px}
+h1{font:900 clamp(44px,11vw,94px)/.9 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 .a{color:var(--hot)} h1 .b{color:var(--cool)}
+.mark{width:clamp(78px,16vw,128px);height:auto;display:block;color:var(--fg)}
+.dek{grid-column:1/-1;font-size:21px;line-height:1.42;margin:8px 0 0;max-width:56ch}
+.byline{font:400 13px/1.4 var(--mono);color:var(--muted);margin-top:14px}
+h2{font:800 34px/1.04 var(--display);letter-spacing:-.01em;margin:54px 0 10px;text-wrap:balance}
+h2 .n{font:500 13px/1 var(--mono);color:var(--hot);display:block;letter-spacing:.1em;margin-bottom:10px}
+h3{font:600 20px/1.25 var(--display);margin:28px 0 6px}
+p{margin:0 0 16px}
+.lede::first-letter{font:900 72px/.8 var(--display);float:left;margin:6px 10px 0 0;color:var(--hot)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 8px}
+.stats div{background:var(--card);padding:14px 12px}
+.stats b{display:block;font:900 clamp(22px,4.4vw,32px)/1 var(--display);letter-spacing:-.01em}
+.stats b.h{color:var(--hot)} .stats b.c{color:var(--cool)} .stats b.g{color:var(--gold)} .stats b.p{color:var(--ink)}
+.stats span{font:400 12px/1.35 var(--mono);color:var(--muted);display:block;margin-top:6px}
+@media (max-width:600px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.figure{margin:26px 0 30px}
+.fig-h{font:600 19px/1.25 var(--display);margin:0 0 4px}
+.fig-sub{font:400 13px/1.45 var(--mono);color:var(--muted);margin:0 0 12px}
+.src{font:400 12px/1.45 var(--mono);color:var(--muted);margin-top:10px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--mono);fill:var(--fg)}
+.lab{font-size:12px}.lab.m{fill:var(--muted)}.lab.b{font-weight:500}.lab.s{font-size:11px}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font:400 12px/1.45 var(--mono);padding:8px 10px;border-radius:3px;max-width:290px;z-index:1000;transform:translate(-50%,calc(-100% - 12px));display:none}
+.tip b{font-weight:500}
+.controls{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
+.scrollrow{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-bottom:2px;max-width:100%}
+.scrollrow .btn{flex:0 0 auto;white-space:nowrap}
+.ctl-l{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px;flex:0 0 auto;align-self:center}
+.btn{font:500 12px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:8px 10px;cursor:pointer;min-height:36px}
+.btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.2)}
+.btn:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.searchbox{position:relative;flex:1 1 260px;min-width:0}
+input[type=search]{font:400 15px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:10px 11px;min-height:40px;width:100%}
+.suggest{position:absolute;left:0;right:0;top:100%;margin:2px 0 0;padding:0;list-style:none;background:var(--card);border:1px solid var(--border);z-index:1001;font:400 13px/1.3 var(--mono);display:none;max-height:340px;overflow:auto}
+.suggest li{padding:8px 10px;cursor:pointer;border-bottom:1px solid var(--rule)}
+.suggest li span{color:var(--muted)}
+.suggest li[aria-selected="true"],.suggest li:hover{background:var(--panel)}
+.yearbox{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 0 10px;font:500 13px/1 var(--mono)}
+.yearbox .yv{font:800 22px/1 var(--display);min-width:4.2ch;text-align:center}
+.dual{position:relative;height:34px}
+.dual input[type=range]{position:absolute;left:0;right:0;top:4px;width:100%;pointer-events:none;-webkit-appearance:none;appearance:none;background:none;margin:0;height:26px}
+.dual input[type=range]::-webkit-slider-thumb{pointer-events:auto;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--hot);border:2px solid var(--card);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.dual input[type=range]::-moz-range-thumb{pointer-events:auto;width:18px;height:18px;border-radius:50%;background:var(--hot);border:2px solid var(--card);cursor:pointer}
+.dual .track{position:absolute;left:0;right:0;top:15px;height:4px;background:var(--rule);border-radius:2px}
+.dual .fill{position:absolute;top:15px;height:4px;background:var(--hot);border-radius:2px}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;align-items:start}
+@media (max-width:900px){.mapgrid{grid-template-columns:1fr}}
+.side{background:var(--card);border:1px solid var(--border);padding:12px 12px 10px;font:400 13px/1.45 var(--mono);max-height:660px;overflow:auto}
+@media (max-width:900px){.side{max-height:none}}
+.side h4{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.side h4:first-child{margin-top:2px}
+.side .big{font:800 26px/1.1 var(--display);margin:2px 0 4px}
+.side .sub{color:var(--muted);font-size:12px;margin:0 0 8px}
+.side ol,.side ul{margin:4px 0 8px;padding-left:20px}
+.side li{margin:3px 0}
+.side li small,.side td small{color:var(--muted)}
+.side table{width:100%;border-collapse:collapse;margin:4px 0 6px}
+.side td{padding:4px 4px 4px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.side td.num{text-align:right;white-space:nowrap}
+.back{font:400 12px var(--mono);background:none;border:0;color:var(--muted);padding:0;cursor:pointer;text-decoration:underline;margin-bottom:6px}
+.go{cursor:pointer;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px}
+.lmap{height:620px;border:1px solid var(--border);background:var(--sea);border-radius:2px}
+@media (max-width:600px){.lmap{height:min(62vh,460px)}}
+.leaflet-container{font:400 12px/1.4 var(--mono);background:var(--sea)}
+.dotcanvas{position:absolute;left:0;top:0;pointer-events:none}
+.lyrBtn{background:var(--card,var(--bg));color:var(--fg);border:1px solid var(--border);border-radius:3px;font:600 12px/1 var(--mono);padding:8px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.lyrBtn[aria-expanded="true"]{background:var(--fg);color:var(--bg)}
+.lyrPanel{background:var(--card,var(--bg));color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:10px 12px 8px;margin-top:6px;width:250px;box-shadow:0 2px 10px rgba(0,0,0,.15);font:400 12px/1.3 var(--mono);max-height:min(70vh,520px);overflow:auto}
+.lyrPanel[hidden]{display:none}
+.lyrPanel .row{margin:0 0 9px}
+.lyrPanel label{display:flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}
+.lyrPanel input[type=range]{width:100%;accent-color:var(--fg)}
+.lyrPanel select{font:400 12px var(--mono);background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:2px;padding:2px 4px;width:100%;min-height:0}
+.lyrPanel .sub{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:11px;margin-top:3px}
+.lyrPanel .sub span{flex:0 0 58px}
+.lyrPanel .hd{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 7px;border-top:1px solid var(--rule);padding-top:9px}
+.lyrPanel .reset{font:400 11px var(--mono);color:var(--muted);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.cityL{font:500 11px/1 var(--mono);color:var(--fg);white-space:nowrap;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 2px var(--bg);pointer-events:none}
+.cityL i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--fg);margin-right:4px;vertical-align:1px}
+.cityL.s{font-size:10px;font-weight:400}
+.cntL{font:700 11px/1 var(--mono);color:var(--fg);white-space:nowrap;text-transform:uppercase;letter-spacing:.06em;opacity:.75;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg);pointer-events:none;text-align:center}
+.boxL{font:600 11px/1.2 var(--mono);color:var(--fg);white-space:nowrap;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg);pointer-events:none}
+.mapnote{background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--border);border-radius:3px;padding:6px 9px;font:400 12px/1.35 var(--mono);max-width:min(300px,62vw);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mapnote b{font-weight:600}
+.mapnote:empty{display:none}
+.leaflet-bar a,.leaflet-bar a:hover{background:var(--card);color:var(--fg);border-bottom-color:var(--border)}
+.leaflet-control-attribution{background:color-mix(in srgb,var(--card) 85%,transparent)!important;color:var(--muted)}
+.leaflet-control-attribution a{color:var(--fg)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--card);color:var(--fg)}
+.leaflet-popup-content{font:400 12.5px/1.45 var(--mono);margin:10px 12px}
+.leaflet-popup-content b{font:700 15px/1.2 var(--display)}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font:400 12px/1.3 var(--mono);color:var(--muted);margin-top:8px;align-items:center}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:13px;height:13px;margin-right:6px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.legend i.sq{border-radius:2px}
+.legend .ramp{display:inline-block;width:150px;height:12px;border-radius:2px;margin:0 6px;border:1px solid rgba(0,0,0,.1)}
+.pull{font:600 26px/1.25 var(--display);border-left:6px solid var(--hot);padding:4px 0 4px 18px;margin:30px 0}
+.note{background:var(--panel);border:1px solid var(--rule);padding:14px 16px;font-size:16px;margin:22px 0}
+.note h3{margin-top:0}
+table.tbl{width:100%;border-collapse:collapse;font:400 13px/1.4 var(--mono)}
+table.tbl th{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 6px 6px 0;border-bottom:2px solid var(--fg)}
+table.tbl td{padding:6px 6px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.tbl td.r,table.tbl th.r{text-align:right;white-space:nowrap}
+table.tbl tr[data-i]{cursor:pointer}
+table.tbl tr[data-i]:hover td{background:var(--panel)}
+.tablebox{max-height:460px;overflow:auto;border:1px solid var(--border);background:var(--card);padding:0 10px}
+details{margin:14px 0}
+summary{font:500 13px/1.4 var(--mono);cursor:pointer;color:var(--fg);padding:8px 0}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.cta a{font:500 13px/1 var(--mono);text-decoration:none;border:1px solid var(--fg);padding:11px 14px;border-radius:3px}
+.cta a.p{background:var(--hot);border-color:var(--hot);color:#fff}
+footer{border-top:6px double var(--fg);margin-top:56px;padding-top:16px;font:400 13px/1.55 var(--mono);color:var(--muted)}
+footer p{margin:0 0 10px}
+.theme{position:fixed;right:12px;bottom:12px;z-index:1002}
+@media print{.theme,.controls{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="kicker"><b>Data study</b><span>Meteorites</span><span>World, 860 to 2013</span></div>
+<header class="hero">
+  <h1>Where <span class="a">space rocks</span> <span class="b">land</span></h1>
+  <svg class="mark" viewBox="0 0 120 120" aria-hidden="true"><g id="heroMark"></g></svg>
+  <p class="dek">Meteorites rain down on the whole planet more or less evenly. The record of them does not. Of the {{source.n|int}} meteorites in the Meteoritical Society's catalogue as NASA publishes it, {{regions.Antarctica.pct|pc}} were picked up on Antarctic ice and {{hot.pct|pc}} in hot deserts. The {{source.falls|int}} that someone actually saw fall tell a different story again: they follow people.</p>
+</header>
+<div class="byline">Dr Tristan Hotham · Independent researcher · 2026 · Data: The Meteoritical Society, Meteoritical Bulletin Database, via NASA's Open Data Portal; Natural Earth</div>
+
+<div class="stats">
+  <div><b class="p">{{source.n|int}}</b><span>meteorites recovered on Earth and recorded up to {{source.last_year|raw}}</span></div>
+  <div><b class="c">{{regions.Antarctica.pct|pc}}</b><span>found on Antarctic ice, where none has ever been seen to fall</span></div>
+  <div><b class="g">{{hot.pct|pc}}</b><span>found in hot deserts: the Sahara, Arabia, the Atacama and Australia</span></div>
+  <div><b class="h">{{source.falls|int}}</b><span>witnessed falls, just {{source.falls_pct|pc1}} of the record</span></div>
+</div>
+
+<p class="lede">Every day, rocks from space reach the ground somewhere on Earth. Most fall into the sea, onto forests or fields, and are never seen again. The ones we know about were either seen to fall, and then picked up (a "fall"), or simply spotted on the ground later (a "find"). The Meteoritical Society has kept the official list for decades, and NASA publishes a copy with the place, year, class and weight of each one.</p>
+<p>Put that list on a map and it looks like a map of meteorites. It is really a map of searching. Antarctica, where ice flows carry stones to bare blue ice fields and expose them, and the hot deserts of North Africa and Oman, where dark stones sit for thousands of years on pale ground, account for {{icedesert.pct|pc}} of all records. The witnessed falls, which do not depend on searching, crowd into Europe, India and Japan, where there have long been many people to look up and someone to write it down. Use the buttons to switch between falls and finds, filter by year and class, and click any dot.</p>
+
+<h2><span class="n">01 · The map</span>{{source.located|int}} meteorites with a place</h2>
+<div class="bleed" id="atlas">
+<div class="controls">
+  <div class="scrollrow" id="fallRow"><span class="ctl-l">Show</span><button class="btn" data-f="all" aria-pressed="true">Falls and finds</button><button class="btn" data-f="fell" aria-pressed="false"><i style="background:#D4481A"></i>Witnessed falls only</button><button class="btn" data-f="found" aria-pressed="false">Finds only</button></div>
+  <div class="scrollrow" id="viewRow"><span class="ctl-l">As</span><button class="btn" data-v="dots" aria-pressed="true">Dots</button><button class="btn" data-v="heat" aria-pressed="false">Density</button></div>
+  <div class="scrollrow" id="colRow"><span class="ctl-l">Colour</span><button class="btn" data-c="region" aria-pressed="true">Where found</button><button class="btn" data-c="group" aria-pressed="false">Class</button></div>
+</div>
+<div class="yearbox"><span class="yv" id="y0v">860</span><div class="dual"><div class="track"></div><div class="fill" id="yfill"></div><input type="range" id="y0" min="0" max="100" step="1" value="0" aria-label="From year"><input type="range" id="y1" min="0" max="100" step="1" value="100" aria-label="To year"></div><span class="yv" id="y1v">2013</span></div>
+<div class="controls">
+  <div class="scrollrow" id="yrRow"><span class="ctl-l">Years</span><button class="btn" data-y="0,9999">All</button><button class="btn" data-y="0,1899">Before 1900</button><button class="btn" data-y="1900,1968">1900 to 1968</button><button class="btn" data-y="1969,9999">1969 on</button></div>
+</div>
+<div class="controls">
+  <div class="scrollrow" id="grpRow"><span class="ctl-l">Class</span></div>
+</div>
+<div class="controls">
+  <div class="searchbox"><input type="search" id="q" placeholder="Search a meteorite or a country" aria-label="Search a meteorite or a country" autocomplete="off"><ul class="suggest" id="sug" role="listbox"></ul></div>
+  <label class="btn" style="display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="bymass" checked> Size by weight</label>
+</div>
+<div class="controls">
+  <div class="scrollrow" id="focusRow"><span class="ctl-l">Zoom to</span></div>
+</div>
+<div class="mapgrid">
+  <div><div id="map" class="lmap" role="application" aria-label="Map of meteorite falls and finds"></div>
+    <div class="legend" id="legend"></div></div>
+  <div class="side" id="side" aria-live="polite"></div>
+</div>
+<p class="src">Dots: the {{source.located|int}} meteorites ({{source.located_pct|pc}}) with a recorded place, sized by recovered weight when "Size by weight" is on. Witnessed falls are drawn on top with a dark ring. {{source.unlocated|int}} records have no usable place (most are desert stones bought from dealers and named only for a broad area, such as {{source.nwa_unlocated|int}} of the {{source.nwa|int}} called "Northwest Africa"); they count in the totals but cannot be mapped. Density counts the dots that pass the filters in each small square of the screen. Source: The Meteoritical Society, Meteoritical Bulletin Database, via NASA's Open Data Portal. Outlines: Natural Earth. Base map tiles © Esri.</p>
+</div>
+
+<h2><span class="n">02 · Falls and finds</span>Most meteorites were found on ice or sand</h2>
+<p>Only {{source.falls|int}} of the {{source.n|int}} meteorites ({{source.falls_pct|pc1}}) were seen to fall. The other {{source.finds|int}} are finds, and most come from a handful of places. Antarctica alone has {{regions.Antarctica.n|int}} ({{regions.Antarctica.pct|pc}}), the Sahara {{regions.Sahara.n|int}} ({{regions.Sahara.pct|pc}}), Arabia, mostly Oman, {{regions.Arabia.n|int}} ({{regions.Arabia.pct|pc}}), and the Atacama and Australian deserts {{regions.Other hot deserts.n|int}}. The whole rest of the world has {{regions.Rest of the world.n|int}} ({{regions.Rest of the world.pct|pc}}), and {{regions.Not known.pct|pc}} cannot be placed at all.</p>
+<div class="figure"><p class="fig-h">Where the record comes from</p><p class="fig-sub">Share of meteorites by where they were recovered: all records, finds, and witnessed falls. Hover a block.</p><div class="chart" id="regChart"></div><div class="legend" id="regLegend"></div></div>
+<p>Turn it around and the witnessed falls are almost all somewhere else: {{rest.falls_pct|pc}} of them land in the "rest of the world", and not one has been recorded in Antarctica. If falls were recorded evenly across the land, Antarctica, which is {{continents.Antarctica.area_pct|pc}} of it, would have about {{continents.Antarctica.expected|int}} of them.</p>
+<div class="figure"><p class="fig-h">The biggest collection areas</p><p class="fig-sub">Meteorites are named after the place they were found, so the name tells you the area. The ten largest hold {{areas_top_share|pc}} of the whole record. Click a row to zoom there.</p><div class="tablebox"><table class="tbl" id="areaTable"></table></div></div>
+
+<h2><span class="n">03 · Ice and sand</span>The great meteorite rush after 1969</h2>
+<p>Before 1969 the record grew slowly, by chance finds and witnessed falls. The first Antarctic meteorite, {{antarctic.first.name|raw}}, turned up in {{antarctic.first.y|raw}}, and only {{antarctic.pre1969|int}} more followed before {{antarctic.yamato.y|raw}}, when a Japanese team found {{antarctic.yamato.n_first|int}} near the Yamato Mountains and realised the ice was concentrating them. Systematic searches by Japanese and American teams followed, and the name Yamato alone now covers {{antarctic.yamato.n|int}} meteorites. From the 1980s hunters and dealers began combing the Sahara and Oman. Finds peaked in the {{finds_time.peak_dec|raw}}s, with {{finds_time.peak_n|int}} in one decade; {{finds_time.since1970_pct|pc}} of all dated finds are from 1970 or later.</p>
+<div class="figure"><p class="fig-h">Meteorites recorded per decade</p><p class="fig-sub">Finds by where they were recovered (bars) and witnessed falls (line, right scale), 1800s to 2010s. The record ends in {{source.last_year|raw}}, so the 2010s are partial. Hover a bar.</p><div class="chart" id="decChart"></div></div>
+<p>Antarctic finds are also small. The median Antarctic meteorite weighs {{mass.median_ant|f1}} g, the median Saharan one {{mass.median_sahara|int}} g, and the median find from the rest of the world {{mass.median_rest_find|int}} g: on bare ice or sand, a stone the size of a grape is easy to spot, while in a field it is just another pebble. Many of these stones are also pieces of the same fall, scattered across the ice and named separately until someone pairs them, so the counts overstate the number of separate falls.</p>
+<p class="pull">A map of meteorites is really a map of where people have looked for them.</p>
+
+<h2><span class="n">04 · Witnessed falls</span>Falls follow people</h2>
+<p>Witnessed falls are the fairest test, because nobody goes out looking for them: they are seen, heard and then searched for. If every fall on land were noticed, each country's share of falls would match its share of land. Instead, Europe, with {{continents.Europe.area_pct|pc}} of the land, has {{continents.Europe.falls_pct|pc}} of the falls ({{continents.Europe.ratio|f1}} times its share); Asia, home to India's {{countries.IND.falls|int}} falls, has {{continents.Asia.ratio|f1}} times; North America almost exactly its share; Africa {{continents.Africa.ratio|f1}}, South America {{continents.South America.ratio|f1}} and Oceania {{continents.Oceania.ratio|f1}}.</p>
+<div class="figure"><p class="fig-h">Witnessed falls by continent, against an even spread</p><p class="fig-sub">Bars: falls recorded. Ticks: falls expected if the {{countries.falls_land|int}} falls with a country were spread evenly over the land, Antarctica included. Hover a bar.</p><div class="chart" id="contChart"></div></div>
+<p>Country by country the gap is wider. Japan has {{countries.JPN.falls|int}} falls where an even spread predicts {{countries.JPN.expected|f1}}, about {{countries.JPN.ratio|int}} times as many; Germany, France and Italy {{countries.DEU.ratio|int}} to {{countries.ITA.ratio|int}} times; the United Kingdom {{countries.GBR.ratio|int}} times, with {{countries.GBR.falls|int}} falls. India has {{countries.IND.falls|int}}, {{countries.IND.ratio|f1}} times its share. At the other end Canada has {{countries.CAN.falls|int}} where {{countries.CAN.expected|int}} would be expected, Brazil {{countries.BRA.falls|int}} against {{countries.BRA.expected|int}}, and Australia {{countries.AUS.falls|int}} against {{countries.AUS.expected|int}}. Libya, which has {{countries.LBY.finds|int}} finds, has {{countries.LBY.falls|int}} fall.</p>
+<div class="figure"><p class="fig-h">Falls recorded compared with an even spread</p><p class="fig-sub">Observed falls divided by expected falls. Top: countries with at least 1.5 falls expected. Bottom: the shortfalls among countries with at least 10 expected. 1 = exactly its share of the land.</p><div class="chart" id="ratioChart"></div></div>
+<p>The link with people is clear but loose. Across the {{countries.n_big|int}} countries larger than 20,000 km², falls per square kilometre rise with people per square kilometre (Spearman's rank correlation {{countries.spearman|f2}}); among the {{countries.n_big_falls|int}} that have at least one fall, the correlation of the two on a log scale is {{countries.pearson_log|f2}}. Population here is today's rough estimate from Natural Earth, not the population when each stone fell, and history matters as much as headcount: Europe and Japan have centuries of written records, newspapers and museums that wanted the stones.</p>
+<div class="figure"><p class="fig-h">Falls and people, country by country</p><p class="fig-sub">Each dot is a country larger than 20,000 km² with at least one fall: people per km² (Natural Earth estimate) against falls per million km². Both scales are logarithmic. Hover or tap a dot.</p><div class="chart" id="popChart"></div></div>
+<p>Over time, witnessed falls rose from {{falls_time.d1800|int}} in the 1800s to {{falls_time.d1860|int}} in the 1860s and a peak of {{falls_time.peak_n|int}} in the {{falls_time.peak_dec|raw}}s, as populations, literacy, newspapers and scientific interest grew. Then they levelled off, at about {{falls_time.since1950_mean|int}} a decade since 1950, even though the world's population grew by {{falls_time.pop_growth_pct|int}}% between the 1960s and the 2000s. The oldest falls in the record are Nogata in Japan (dated {{falls_time.oldest.0.y|raw}}) and Narni in Italy ({{falls_time.oldest.1.y|raw}}).</p>
+
+<h2><span class="n">05 · Heavy metal</span>The giants are all iron, and all finds</h2>
+<p>The heaviest meteorite on record is Hoba in Namibia, {{heaviest.0.t|f1}} tonnes, still lying where it was found in {{heaviest.0.y|raw}}. Next come Cape York in Greenland ({{heaviest.1.t|f1}} t, many pieces) and Campo del Cielo in Argentina ({{heaviest.2.t|f1}} t). All ten of the heaviest are irons, and {{mass.top10_found|int}} of the ten are finds. The heaviest witnessed fall is Sikhote-Alin in the Russian Far East ({{heaviest_falls.0.t|int}} t, {{heaviest_falls.0.y|raw}}), followed by Jilin in China ({{heaviest_falls.1.t|int}} t, {{heaviest_falls.1.y|raw}}) and Allende in Mexico ({{heaviest_falls.2.t|int}} t, {{heaviest_falls.2.y|raw}}).</p>
+<div class="figure"><p class="fig-h">The heaviest meteorites</p><p class="fig-sub">Total recovered weight. Click a row to see it on the map.</p><div class="tablebox"><table class="tbl" id="heavyTable"></table></div></div>
+<p>Iron meteorites are rare among falls ({{classes.Iron.falls_pct|pc1}}) but make up {{classes.Iron.rest_pct|pc}} of finds outside Antarctica and the deserts. They rust slowly, look and feel unlike any local rock, and set off metal detectors, so in fields and forests they are the ones people notice and keep. On ice and sand, where every dark stone stands out, the mix of finds looks much more like the falls: mostly ordinary chondrites. The rarest stones of all, {{mars_moon.martian|int}} from Mars and {{mars_moon.lunar|int}} from the Moon, come {{mars_moon.desert_ice_pct|pc}} from ice and desert.</p>
+<div class="figure"><p class="fig-h">What kind of meteorite, by how it was recovered</p><p class="fig-sub">Share of each broad class among witnessed falls, Antarctic finds, hot desert finds and finds from the rest of the world. Hover a block.</p><div class="chart" id="clsChart"></div><div class="legend" id="clsLegend"></div></div>
+
+<h2><span class="n">06 · How I did this</span>Methods and caveats</h2>
+<p><b>Data.</b> NASA's Meteorite Landings table ({{source.n_rows|int}} records), compiled from the Meteoritical Society's Meteoritical Bulletin Database, from a copy mirrored on GitHub and checked cell by cell against a second, independent mirror (identical except that three old finds with no year in the first copy have a garbled year in the second) and a third, five-column one. It has the name, class, recovered weight, fall or find, year and coordinates of each meteorite. The table stops in {{source.last_year|raw}}; the live Bulletin has grown a great deal since. I dropped one record, Meridiani Planum, which was found on Mars by a rover. Years are as given (the table stores 1 January of the year); one year in the future was set to missing.</p>
+<p><b>Places.</b> {{source.unlocated|int}} records have no coordinates or sit at exactly 0°, 0°, which means unknown. For these I took the region from the collection area in the name (for example "Northwest Africa 869" or "Yamato 791197") when at least 80% of that area's located meteorites share one region ({{source.region_from_name|int}} records). Antarctica is everything south of 60°S. The hot deserts are rough boxes: the Sahara (15°N to 34°N, 17.5°W to 34°E), Arabia (12°N to 31°N, 35°E to 60°E), the Atacama, and the Australian deserts (including the Nullarbor). Present-day countries are from Natural Earth.</p>
+<p><b>Even spread.</b> Meteorites arrive at a rate that is close to uniform over the globe, so I compare each country's falls with its share of the world's land area. Population is Natural Earth's recent estimate (POP_EST), used only as a rough guide; it is not the population at the time of each fall. About {{ocean.falls_per_land|f1}} times as many falls land in the sea as on land, and none of those are in the record.</p>
+<p><b>What this is not.</b> It is not a count of meteorite falls. Antarctic and desert totals are inflated by fragments of single falls named separately; finds have no date of fall at all, only a date of finding; and weights are the total recovered, sometimes from many pieces. The record also reflects who was searching: national Antarctic programmes, commercial hunters in the Sahara and Oman, and the museums that classified their stones.</p>
+<details><summary>Sources and licences</summary>
+<ul>
+<li>The Meteoritical Society, Meteoritical Bulletin Database (https://www.lpi.usra.edu/meteor/), as published by NASA's Open Data Portal as "Meteorite Landings" (https://data.nasa.gov/), mirrored on GitHub; retrieved {{meta.retrieved|raw}}. NASA open data.</li>
+<li>Natural Earth countries and populated places, and population estimates (public domain).</li>
+<li>World Bank world population (CC BY 4.0), used only for the change from the 1960s to the 2000s.</li>
+<li>Base map tiles © Esri.</li>
+</ul></details>
+
+<div class="cta"><a class="p" href="https://doi.org/{{meta.doi|raw}}">Read the paper</a><a href="https://github.com/Tristan-Hotham/meteorite-falls">Data and code</a><a href="{{meta.blog|raw}}">Blog post</a></div>
+
+<footer>
+<p>Dr Tristan Hotham, Independent researcher. ORCID <a href="https://orcid.org/0000-0003-4931-9349">0000-0003-4931-9349</a>.</p>
+<p>Cite as: Hotham, T. (2026) Where space rocks land: falls, finds and the geography of the meteorite record. Zenodo. <a href="https://doi.org/{{meta.doi|raw}}">https://doi.org/{{meta.doi|raw}}</a></p>
+<p>Data: The Meteoritical Society (Meteoritical Bulletin Database) and NASA (Open Data Portal). Licence: derived data and text CC BY 4.0, code MIT.</p>
+<p>I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.</p>
+</footer>
+</div>
+<div class="tip" id="tip"></div>
+<button class="btn theme" id="theme" aria-label="Toggle dark mode">◐</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const R = /*RESULTS*/;
+const SITE = /*SITE*/;
+const WORLD = /*WORLD*/;
+const CITIES = /*CITIES*/;
+const fmt = n => n == null || n === "" ? "n/a" : Math.round(n).toLocaleString("en-GB");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tip = document.getElementById("tip");
+function showTip(h, x, y) { tip.innerHTML = h; tip.style.display = "block"; const w = tip.offsetWidth; x = Math.max(w / 2 + 8, Math.min(innerWidth - w / 2 - 8, x)); tip.style.left = x + scrollX + "px"; tip.style.top = y + scrollY + "px"; }
+function hideTip() { tip.style.display = "none"; }
+document.addEventListener("click", hideTip);
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const lbl = (svg, x, y, s, cls = "lab", anchor = "start") => { const t = el("text", { x, y, class: cls, "text-anchor": anchor }, svg); t.textContent = s; return t; };
+const redraws = [];
+function resp(box, render) { let last = 0; const go = force => { const w = Math.max(280, Math.round(box.clientWidth)); if (!force && Math.abs(w - last) < 4) return; last = w; box.innerHTML = ""; render(w, w < 560); }; new ResizeObserver(() => go()).observe(box); go(); redraws.push(() => go(true)); }
+const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const CN = iso => (SITE.cname[iso] || iso || "no country");
+const small = () => innerWidth < 900;
+const GROUPS = SITE.groups, REGIONS = SITE.regions;
+const GC = GROUPS.map(g => g[1]), RC = REGIONS.map(r => r[1]);
+const FALLC = "#D4481A";
+const MB = id => `<a href="https://www.lpi.usra.edu/meteor/metbull.php?code=${id}" target="_blank" rel="noopener">Meteoritical Bulletin entry</a>`;
+const wt = g => g < 0 ? "weight not recorded" : g >= 1e6 ? (g / 1e6).toFixed(g >= 1e7 ? 0 : 1) + " t" : g >= 1000 ? (g / 1000).toFixed(g >= 1e4 ? 0 : 1) + " kg" : (g >= 10 ? Math.round(g) : g.toFixed(1)) + " g";
+
+/* hero mark: a fireball over a dotted globe */
+(function () {
+  const g = document.getElementById("heroMark");
+  el("circle", { cx: 66, cy: 70, r: 42, fill: "none", stroke: "currentColor", "stroke-width": 3 }, g);
+  [[-20, 0], [0, 0], [20, 0], [-10, -18], [12, -18], [-10, 18], [12, 18], [0, 34], [-28, 18], [30, 14]].forEach(([dx, dy], i) => el("circle", { cx: 66 + dx, cy: 70 + dy, r: i % 3 ? 2.6 : 3.4, fill: i < 4 ? RC[0] : RC[1] }, g));
+  el("path", { d: "M8 8 L52 44", stroke: FALLC, "stroke-width": 5, "stroke-linecap": "round", opacity: .5 }, g);
+  el("path", { d: "M26 22 L56 48", stroke: FALLC, "stroke-width": 7, "stroke-linecap": "round" }, g);
+  el("circle", { cx: 58, cy: 50, r: 7, fill: FALLC, stroke: "currentColor", "stroke-width": 2 }, g);
+})();
+
+/* ---------- map machinery ---------- */
+const ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/";
+const ESRI_ATT = 'Tiles &copy; Esri, HERE, Garmin, USGS, NGA, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, and the GIS user community';
+const LYDEF = { base: "plain", hills: true, hillK: 45, labels: false, labelK: 80, names: true, nameLvl: 1, cnames: true, borders: true, falls: true, finds: true, size: 3, ratio: false, ratioK: 60, boxes: false };
+const LY = { ...LYDEF };
+try { Object.assign(LY, JSON.parse(localStorage.getItem("meteor_layers") || "{}")); } catch (e) {}
+const saveLY = () => { try { localStorage.setItem("meteor_layers", JSON.stringify(LY)); } catch (e) {} };
+const HOME = () => small() ? [[-12, 15], 1] : [[-18, 15], 1.5];
+const map = L.map("map", { minZoom: 1, maxZoom: 13, maxBounds: [[-88, -220], [88, 220]], zoomSnap: .5, worldCopyJump: false }).setView(...HOME());
+["hills:250", "fill:400", "labels:450", "pts:600", "names:620"].forEach(s => { const [n, z] = s.split(":"); map.createPane(n); map.getPane(n).style.zIndex = z; });
+["hills", "labels", "names", "pts"].forEach(n => map.getPane(n).style.pointerEvents = "none");
+let base = null, hills = null, labels = null; const names = L.layerGroup(), cnames = L.layerGroup(), boxes = L.layerGroup();
+function setTiles() {
+  [base, labels, hills].forEach(l => { if (l) map.removeLayer(l); });
+  const t = isDark() ? "Dark" : "Light";
+  const url = LY.base === "relief" ? ESRI + "World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}" : LY.base === "satellite" ? ESRI + "World_Imagery/MapServer/tile/{z}/{y}/{x}" : `${ESRI}Canvas/World_${t}_Gray_Base/MapServer/tile/{z}/{y}/{x}`;
+  base = L.tileLayer(url, { maxZoom: 16, maxNativeZoom: LY.base === "relief" ? 13 : 16, attribution: ESRI_ATT }).addTo(map);
+  hills = L.tileLayer(ESRI + "Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16, maxNativeZoom: 16, pane: "hills" });
+  labels = L.tileLayer(`${ESRI}Canvas/World_${t}_Gray_Reference/MapServer/tile/{z}/{y}/{x}`, { maxZoom: 16, pane: "labels" });
+  applyLayers();
+}
+function applyLayers() {
+  if (!base) return;
+  if (LY.hills) { hills.addTo(map); hills.setOpacity(Math.min(1, .15 + LY.hillK / 120)); } else map.removeLayer(hills);
+  if (LY.labels) { labels.addTo(map); labels.setOpacity(LY.labelK / 100); } else map.removeLayer(labels);
+  if (LY.names) names.addTo(map); else map.removeLayer(names);
+  if (LY.cnames) cnames.addTo(map); else map.removeLayer(cnames);
+  if (LY.boxes) boxes.addTo(map); else map.removeLayer(boxes);
+  cLayer.setStyle(cStyle); placeNames(); dots.draw();
+}
+function placeNames() {
+  names.clearLayers(); cnames.clearLayers();
+  const z = map.getZoom(), bb = map.getBounds().pad(.05); const bxs = [];
+  if (LY.names) {
+    const minPop = [[2, 8e6], [3, 3e6], [4, 1e6], [5, 4e5], [6, 1.5e5], [99, 4e4]].find(([zz]) => z < zz + (LY.nameLvl === 2 ? 1.5 : LY.nameLvl === 0 ? -1 : 0))[1] * (LY.nameLvl === 0 ? 2 : 1);
+    let n = 0;
+    for (const c of CITIES) {
+      if (c.pop < minPop || !bb.contains([c.lat, c.lon])) continue;
+      const pt = map.latLngToContainerPoint([c.lat, c.lon]), big = c.pop >= 5e6;
+      const bx = [pt.x - 4, pt.y - 8, pt.x + 10 + c.name.length * (big ? 6.9 : 6.3), pt.y + 7];
+      if (bxs.some(o => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) continue;
+      bxs.push(bx); L.marker([c.lat, c.lon], { pane: "names", interactive: false, keyboard: false, icon: L.divIcon({ className: "cityL" + (big ? "" : " s"), html: `<i></i>${esc(c.name)}`, iconSize: null, iconAnchor: [3, 6] }) }).addTo(names);
+      if (++n >= 120) break;
+    }
+  }
+  if (LY.cnames && z >= 3 && z < 7) {
+    WORLD.features.forEach(f => { const g = SITE.cpos[f.properties.iso]; if (!g || !bb.contains([g[1], g[0]])) return; const nm = CN(f.properties.iso);
+      if (z < 4 && (g[2] || 0) < 2e7) return; const pt = map.latLngToContainerPoint([g[1], g[0]]), w = nm.length * 7.2;
+      const bx = [pt.x - w / 2, pt.y - 7, pt.x + w / 2, pt.y + 7]; if (bxs.some(o => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) return; bxs.push(bx);
+      L.marker([g[1], g[0]], { pane: "names", interactive: false, keyboard: false, icon: L.divIcon({ className: "cntL", html: esc(nm), iconSize: [w, 14], iconAnchor: [w / 2, 7] }) }).addTo(cnames); });
+  }
+}
+(function layerControl() {
+  const Ctl = L.Control.extend({ options: { position: "topright" }, onAdd() {
+    const d = L.DomUtil.create("div"); L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
+    d.innerHTML = `<button class="lyrBtn" aria-expanded="false">Map layers</button>
+<div class="lyrPanel" hidden>
+ <div class="row"><label style="font-weight:600">Base map</label><div class="sub"><select data-k="base" aria-label="Base map"><option value="plain">Plain grey</option><option value="relief">Shaded relief</option><option value="satellite">Satellite</option></select></div></div>
+ <div class="row"><label><input type="checkbox" data-k="hills"> Hills and mountains</label><div class="sub"><span>strength</span><input type="range" data-k="hillK" min="10" max="100" step="5" aria-label="Hill shading strength"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="labels"> Map labels</label><div class="sub"><span>strength</span><input type="range" data-k="labelK" min="20" max="100" step="5" aria-label="Map label strength"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="names"> Bold city names</label><div class="sub"><span>how many</span><select data-k="nameLvl" aria-label="How many city names"><option value="0">Biggest only</option><option value="1">Some</option><option value="2">Lots</option></select></div></div>
+ <div class="row"><label><input type="checkbox" data-k="cnames"> Country names</label></div>
+ <div class="row"><label><input type="checkbox" data-k="borders"> Borders</label></div>
+ <div class="hd">Meteorites</div>
+ <div class="row"><label><input type="checkbox" data-k="falls"> Witnessed falls</label></div>
+ <div class="row"><label><input type="checkbox" data-k="finds"> Finds</label><div class="sub"><span>dot size</span><input type="range" data-k="size" min="1.5" max="6" step=".5" aria-label="Dot size"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="ratio"> Countries: falls against an even spread</label><div class="sub"><span>strength</span><input type="range" data-k="ratioK" min="10" max="100" step="5" aria-label="Country colour strength"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="boxes"> Hot desert boxes and 60°S</label></div>
+ <button class="reset">Reset layers</button>
+</div>`;
+    return d; } });
+  map.addControl(new Ctl());
+  const box = map.getContainer(), btn = box.querySelector(".lyrBtn"), pan = box.querySelector(".lyrPanel");
+  btn.onclick = () => { const o = pan.hidden; pan.hidden = !o; btn.setAttribute("aria-expanded", o); };
+  const sync = () => pan.querySelectorAll("[data-k]").forEach(i => { const k = i.dataset.k; if (i.type === "checkbox") i.checked = LY[k]; else i.value = LY[k]; });
+  pan.querySelectorAll("[data-k]").forEach(i => i.addEventListener(i.type === "range" ? "input" : "change", () => {
+    const k = i.dataset.k; LY[k] = i.type === "checkbox" ? i.checked : (k === "base" ? i.value : +i.value);
+    if (k === "hillK") LY.hills = true; if (k === "labelK") LY.labels = true; if (k === "nameLvl") LY.names = true; if (k === "ratioK") LY.ratio = true; if (k === "size") LY.finds = true;
+    sync(); saveLY(); if (k === "base") setTiles(); else applyLayers(); legend(); side();
+  }));
+  pan.querySelector(".reset").onclick = () => { Object.assign(LY, LYDEF); saveLY(); sync(); setTiles(); legend(); side(); };
+  sync();
+})();
+const Note = L.Control.extend({ options: { position: "bottomleft" }, onAdd() { const d = L.DomUtil.create("div", "mapnote"); d.id = "mapnote"; L.DomEvent.disableClickPropagation(d); return d; } });
+map.addControl(new Note());
+L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
+/* desert boxes and the 60 S line */
+(function () {
+  const B = R.meta.boxes, nm = { "Sahara": "Sahara", "Arabia": "Arabia", "Atacama": "Atacama", "Australian deserts": "Australian deserts" };
+  Object.entries(B).forEach(([k, b]) => { const c = k === "Sahara" ? RC[1] : k === "Arabia" ? RC[2] : RC[3];
+    L.rectangle([[b[1], b[0]], [b[3], b[2]]], { pane: "fill", color: c, weight: 1.6, dashArray: "5 4", fill: false, interactive: false }).addTo(boxes);
+    L.marker([b[3], b[0]], { pane: "names", interactive: false, icon: L.divIcon({ className: "boxL", html: esc(nm[k]), iconSize: null, iconAnchor: [-4, -4] }) }).addTo(boxes); });
+  L.polyline([[-60, -200], [-60, 200]], { pane: "fill", color: RC[0], weight: 1.6, dashArray: "5 4", interactive: false }).addTo(boxes);
+  L.marker([-60, -40], { pane: "names", interactive: false, icon: L.divIcon({ className: "boxL", html: "60°S: Antarctica", iconSize: null, iconAnchor: [0, -4] }) }).addTo(boxes);
+})();
+
+/* ---------- state ---------- */
+const YMIN = 860, YMAX = R.source.last_year;
+const S = { f: "all", view: "dots", col: "region", y0: YMIN, y1: YMAX, grp: new Set(GROUPS.map((g, i) => i)), mass: true, sel: null, met: null };
+
+/* ---------- countries ---------- */
+function ratioCol(r) { // diverging: brown (fewer than even) to white to orange-red (more)
+  if (r == null) return css("--land");
+  const t = Math.max(-1, Math.min(1, Math.log10(Math.max(r, .05)) / 1.2));
+  const A = t < 0 ? [140, 110, 70] : [212, 72, 26], W = isDark() ? [50, 55, 64] : [246, 244, 239], k = Math.abs(t);
+  return "rgb(" + W.map((w, i) => Math.round(w + (A[i] - w) * k)).join(",") + ")";
+}
+function cStyle(f) {
+  const iso = f.properties.iso, bd = css("--border") || "#999", c = SITE.c[iso], sel = iso === S.sel;
+  const on = LY.ratio && c && c[2] >= .3;
+  return { color: sel ? css("--fg") : bd, weight: LY.borders ? (sel ? 2.4 : .6) : (sel ? 2 : 0), fillColor: on ? ratioCol(c[3]) : css("--land"), fillOpacity: on ? .85 * LY.ratioK / 100 : .18 };
+}
+const cLayer = L.geoJSON(WORLD, { pane: "fill", style: cStyle, onEachFeature: (f, l) => {
+  l.on("click", e => { L.DomEvent.stopPropagation(e); const h = hitDot(e.containerPoint); if (h >= 0) pickMet(h, false); else pickCountry(f.properties.iso, false); });
+  l.on("mousemove", e => { const h = hitDot(e.containerPoint); map.getContainer().style.cursor = h >= 0 ? "pointer" : ""; const r = map.getContainer().getBoundingClientRect(); showTip(h >= 0 ? metTip(h) : cTip(f.properties.iso), r.left + e.containerPoint.x, r.top + e.containerPoint.y); });
+  l.on("mouseout", hideTip);
+} }).addTo(map);
+map.on("click", e => { const h = hitDot(e.containerPoint); if (h >= 0) pickMet(h, false); });
+function cTip(iso) {
+  const c = SITE.c[iso]; if (!c) return `<b>${esc(CN(iso))}</b><br>no meteorites recorded`;
+  return `<b>${esc(CN(iso))}</b><br>${fmt(c[0])} witnessed fall${c[0] === 1 ? "" : "s"} (${c[2].toFixed(1)} expected from its area)<br>${fmt(c[1])} find${c[1] === 1 ? "" : "s"} with a point here`;
+}
+
+/* ---------- meteorite dots and density on one canvas ---------- */
+let STACKS = [], P = null, Z = -1, XY = null, VIS = new Int32Array(0), NV = 0, CNT = { n: 0, f: 0, k: 0 };
+const keep = p => (p[4] ? (S.f !== "found" && LY.falls) : (S.f !== "fell" && LY.finds)) && S.grp.has(p[5]) && (p[2] ? p[2] >= S.y0 && p[2] <= S.y1 : (S.y0 === YMIN && S.y1 === YMAX));
+const rad = (p, r0) => { if (!S.mass || p[3] <= 0) return p[4] ? r0 * 1.25 : r0 * .8; const l = Math.log10(p[3]); return Math.max(1.2, r0 * (.35 + .32 * Math.max(0, l - .5))) * (p[4] ? 1.05 : 1); };
+const colOf = p => S.col === "group" ? GC[p[5]] : (p[4] ? FALLC : RC[p[6]]);
+const Dots = L.Layer.extend({
+  onAdd(m) { this._c = L.DomUtil.create("canvas", "dotcanvas"); m.getPane("pts").appendChild(this._c); m.on("moveend zoomend resize viewreset", this._reset, this); m.on("zoomstart", () => this._c.style.opacity = 0); this._reset(); },
+  onRemove(m) { L.DomUtil.remove(this._c); m.off("moveend zoomend resize viewreset", this._reset, this); },
+  _reset() { const s = map.getSize(), d = devicePixelRatio || 1; L.DomUtil.setPosition(this._c, map.containerPointToLayerPoint([0, 0])); this._c.width = s.x * d; this._c.height = s.y * d; this._c.style.width = s.x + "px"; this._c.style.height = s.y + "px"; this._c.style.opacity = 1; this.draw(); },
+  draw() {
+    if (!this._c) return; const ctx = this._c.getContext("2d"), d = devicePixelRatio || 1; ctx.setTransform(d, 0, 0, d, 0, 0); ctx.clearRect(0, 0, this._c.width, this._c.height); NV = 0;
+    if (!P) return;
+    const z = map.getZoom(); if (z !== Z) { Z = z; XY = new Float32Array(P.length * 2); P.forEach((p, i) => { const q = map.project([p[0], p[1]], z); XY[2 * i] = q.x; XY[2 * i + 1] = q.y; }); VIS = new Int32Array(P.length); }
+    const o = map.getPixelOrigin(), off = map.containerPointToLayerPoint([0, 0]), ox = o.x + off.x, oy = o.y + off.y, sz = map.getSize();
+    const r0 = LY.size * (z < 3 ? .85 : z < 5 ? 1 : z < 7 ? 1.3 : 1.7), dark = isDark();
+    const rim = dark ? "rgba(0,0,0,.55)" : "rgba(255,255,255,.8)";
+    const finds = [], falls = []; CNT = { n: 0, f: 0, k: 0 };
+    for (let i = 0; i < P.length; i++) {
+      const p = P[i]; if (!keep(p)) continue;
+      CNT.n++; if (p[4]) CNT.f++; else CNT.k++;
+      const x = XY[2 * i] - ox, yy = XY[2 * i + 1] - oy; if (x < -20 || yy < -20 || x > sz.x + 20 || yy > sz.y + 20) continue;
+      VIS[NV++] = i; (p[4] ? falls : finds).push(i);
+    }
+    if (S.view === "heat") {
+      const cs = z < 3 ? 10 : 14, nx = Math.ceil(sz.x / cs), ny = Math.ceil(sz.y / cs), G = new Float32Array(nx * ny);
+      for (let k = 0; k < NV; k++) { const i = VIS[k], gx = Math.floor((XY[2 * i] - ox) / cs), gy = Math.floor((XY[2 * i + 1] - oy) / cs); if (gx >= 0 && gy >= 0 && gx < nx && gy < ny) G[gy * nx + gx]++; }
+      let mx = 1; for (const v of G) if (v > mx) mx = v;
+      const ramp = [[255, 236, 179], [253, 174, 97], [227, 92, 40], [160, 32, 40], [70, 10, 50]];
+      for (let gy = 0; gy < ny; gy++) for (let gx = 0; gx < nx; gx++) { const v = G[gy * nx + gx]; if (!v) continue;
+        const t = Math.log(1 + v) / Math.log(1 + mx), s = t * (ramp.length - 1), a = Math.min(ramp.length - 2, Math.floor(s)), u = s - a, c = ramp[a].map((x, j) => Math.round(x + (ramp[a + 1][j] - x) * u));
+        ctx.fillStyle = `rgba(${c},${.55 + .4 * t})`; ctx.fillRect(gx * cs, gy * cs, cs - 1, cs - 1); }
+      return;
+    }
+    // finds: light ones first so the heavy ones stay on top (rows are sorted by weight); then falls with a dark ring
+    ctx.lineWidth = .6; ctx.strokeStyle = rim;
+    for (const i of finds) { const p = P[i], r = rad(p, r0); ctx.beginPath(); ctx.arc(XY[2 * i] - ox, XY[2 * i + 1] - oy, r, 0, 7); ctx.fillStyle = colOf(p); ctx.globalAlpha = .82; ctx.fill(); ctx.globalAlpha = 1; if (r >= 3) ctx.stroke(); }
+    // stacks: many finds share one point (thousands of Antarctic stones are logged at one spot per ice field); ring area grows with the count
+    const ST = new Map();
+    for (const i of finds) { const p = P[i], k = Math.round(p[0] * 20) + "," + Math.round(p[1] * 20); const s = ST.get(k); if (s) s.n++; else ST.set(k, { n: 1, i }); }
+    STACKS = [];
+    ctx.font = "500 11px 'IBM Plex Mono', monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for (const s of ST.values()) { if (s.n < 20) continue; const p = P[s.i], x = XY[2 * s.i] - ox, yy = XY[2 * s.i + 1] - oy, r = 4 + 3.2 * Math.log2(s.n / 10); const sc = S.col === "group" ? "#8A8F96" : colOf(p);
+      STACKS.push([s.i, s.n]);
+      ctx.beginPath(); ctx.arc(x, yy, r, 0, 7); ctx.fillStyle = sc; ctx.globalAlpha = .28; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = sc; ctx.lineWidth = 1.4; ctx.stroke();
+      if (s.n >= 200 || (z >= 4 && s.n >= 50)) { const t = s.n >= 1000 ? (s.n / 1000).toFixed(1) + "k" : String(s.n); ctx.lineWidth = 3; ctx.strokeStyle = dark ? "#000" : "#fff"; ctx.strokeText(t, x, yy - r - 7); ctx.fillStyle = dark ? "#fff" : "#1D2128"; ctx.fillText(t, x, yy - r - 7); } }
+    ctx.strokeStyle = dark ? "#fff" : "#2a1a12"; ctx.lineWidth = 1;
+    for (const i of falls) { const p = P[i], r = Math.max(2.2, rad(p, r0)); ctx.beginPath(); ctx.arc(XY[2 * i] - ox, XY[2 * i + 1] - oy, r, 0, 7); ctx.fillStyle = colOf(p); ctx.fill(); ctx.stroke(); }
+    if (S.met != null) { const i = S.met; const x = XY[2 * i] - ox, yy = XY[2 * i + 1] - oy; ctx.beginPath(); ctx.arc(x, yy, rad(P[i], r0) + 5, 0, 7); ctx.strokeStyle = dark ? "#fff" : "#000"; ctx.lineWidth = 2.2; ctx.stroke(); }
+  }
+});
+const dots = new Dots().addTo(map);
+function hitDot(cp) {
+  if (!P || !NV || S.view === "heat") return -1; const o = map.getPixelOrigin(), off = map.containerPointToLayerPoint([0, 0]), ox = o.x + off.x, oy = o.y + off.y;
+  let best = -1, bd = 81; for (let k = 0; k < NV; k++) { const i = VIS[k], dx = XY[2 * i] - ox - cp.x, dy = XY[2 * i + 1] - oy - cp.y, d = dx * dx + dy * dy - (P[i][4] ? 6 : 0); if (d < bd) { bd = d; best = i; } }
+  return best;
+}
+function metTip(i) { const p = P[i]; return `<b>${esc(p[8])}</b><br>${p[4] ? "witnessed fall" : "find"}${p[2] ? ", " + p[2] : ""} · ${esc(p[9])} · ${wt(p[3])}`; }
+let NAMEIX = null;
+fetch("data/points.json").then(r => r.json()).then(j => { P = j.rows; Z = -1; dots.draw(); side(); legend(); });
+
+/* ---------- controls ---------- */
+const y0 = document.getElementById("y0"), y1 = document.getElementById("y1");
+const YS = v => { const t = v / 100; return Math.round(t < .25 ? YMIN + (1800 - YMIN) * t / .25 : 1800 + (YMAX - 1800) * (t - .25) / .75); };   // first quarter of the slider covers 860 to 1800
+const SY = y => y <= 1800 ? (y - YMIN) / (1800 - YMIN) * 25 : 25 + (y - 1800) / (YMAX - 1800) * 75;
+function setYears(a, b, fromSlider) {
+  S.y0 = Math.max(YMIN, Math.min(a, b)); S.y1 = Math.min(YMAX, Math.max(a, b));
+  if (!fromSlider) { y0.value = SY(S.y0); y1.value = SY(S.y1); }
+  document.getElementById("y0v").textContent = S.y0; document.getElementById("y1v").textContent = S.y1;
+  const f = document.getElementById("yfill"), a0 = Math.min(+y0.value, +y1.value), b0 = Math.max(+y0.value, +y1.value); f.style.left = a0 + "%"; f.style.width = (b0 - a0) + "%";
+  document.querySelectorAll("#yrRow .btn").forEach(x => { const [p, q] = x.dataset.y.split(",").map(Number); x.setAttribute("aria-pressed", Math.max(YMIN, p) === S.y0 && Math.min(YMAX, q) === S.y1); });
+  dots.draw(); side();
+}
+[y0, y1].forEach(i => i.addEventListener("input", () => setYears(YS(+y0.value), YS(+y1.value), true)));
+document.querySelectorAll("#yrRow .btn").forEach(b => b.onclick = () => { const [p, q] = b.dataset.y.split(",").map(Number); setYears(p, q); });
+const press = (row, b) => document.querySelectorAll(row + " .btn").forEach(x => x.setAttribute("aria-pressed", x === b));
+function setFall(f) { S.f = f; document.querySelectorAll("#fallRow .btn").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === f)); dots.draw(); side(); legend(); }
+document.querySelectorAll("#fallRow .btn").forEach(b => b.onclick = () => setFall(b.dataset.f));
+document.querySelectorAll("#viewRow .btn").forEach(b => b.onclick = () => { S.view = b.dataset.v; press("#viewRow", b); dots.draw(); legend(); });
+document.querySelectorAll("#colRow .btn").forEach(b => b.onclick = () => { S.col = b.dataset.c; press("#colRow", b); dots.draw(); legend(); });
+document.getElementById("bymass").onchange = e => { S.mass = e.target.checked; dots.draw(); };
+(function grpRow() {
+  const row = document.getElementById("grpRow");
+  const all = document.createElement("button"); all.className = "btn"; all.textContent = "All"; all.setAttribute("aria-pressed", "true"); row.appendChild(all);
+  const bs = GROUPS.map(([n, c], i) => { const b = document.createElement("button"); b.className = "btn"; b.innerHTML = `<i style="background:${c}"></i>${esc(n)}`; b.setAttribute("aria-pressed", "false"); b.dataset.g = i; row.appendChild(b); return b; });
+  const sync = () => { const allOn = S.grp.size === GROUPS.length; all.setAttribute("aria-pressed", allOn); bs.forEach(b => b.setAttribute("aria-pressed", !allOn && S.grp.has(+b.dataset.g))); dots.draw(); side(); };
+  all.onclick = () => { S.grp = new Set(GROUPS.map((g, i) => i)); sync(); };
+  bs.forEach(b => b.onclick = () => { const g = +b.dataset.g; if (S.grp.size === GROUPS.length) S.grp = new Set([g]); else if (S.grp.has(g)) { S.grp.delete(g); if (!S.grp.size) S.grp = new Set(GROUPS.map((x, i) => i)); } else S.grp.add(g); sync(); });
+})();
+
+/* ---------- legend, side panel ---------- */
+function legend() {
+  const e = document.getElementById("legend"); let h = "";
+  if (S.view === "heat") h += `<span>fewer</span><span class="ramp" style="background:linear-gradient(90deg,#FFECB3,#FDAE61,#E35C28,#A02028,#460A32)"></span><span>more meteorites per square</span>`;
+  else if (S.col === "group") h += GROUPS.map(([n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join("") + `<span><i style="background:transparent;border:2px solid var(--fg)"></i>dark ring: witnessed fall</span>`;
+  else { if (S.f !== "found") h += `<span><i style="background:${FALLC};border:1.5px solid var(--fg)"></i>witnessed fall</span>`; if (S.f !== "fell") h += REGIONS.slice(0, 5).map(([n, c]) => `<span><i style="background:${c}"></i>find: ${esc(n)}</span>`).join(""); }
+  if (S.view === "dots" && S.mass) h += `<span>size: recovered weight</span>`;
+  if (S.view === "dots" && S.f !== "fell") h += `<span><i style="background:transparent;border:1.5px solid var(--muted);width:18px;height:18px"></i>pale ring: 20 or more finds at one spot (number shown)</span>`;
+  if (LY.ratio) h += `<span><i class="sq" style="background:${ratioCol(.1)}"></i>fewer falls than an even spread</span><span><i class="sq" style="background:${ratioCol(10)}"></i>more</span>`;
+  e.innerHTML = h;
+}
+function note(h) { document.getElementById("mapnote").innerHTML = h || ""; }
+function side() {
+  const box = document.getElementById("side"); let h = "";
+  if (S.met != null && P) {
+    const p = P[S.met];
+    h = `<button class="back">Back</button><h4>${p[4] ? "Witnessed fall" : "Find"}</h4><div class="big">${esc(p[8])}</div><table>
+<tr><td>Year ${p[4] ? "fell" : "found"}</td><td>${p[2] || "not recorded"}</td></tr><tr><td>Class</td><td>${esc(p[9])} <small>(${esc(GROUPS[p[5]][0].toLowerCase())})</small></td></tr>
+<tr><td>Recovered weight</td><td>${wt(p[3])}</td></tr><tr><td>Country</td><td>${p[10] ? `<span class="go" data-c="${esc(p[10])}">${esc(CN(p[10]))}</span>` : "none (sea or ice)"}</td></tr>
+<tr><td>Region</td><td>${esc(REGIONS[p[6]][0])}</td></tr><tr><td>Place</td><td>${p[0].toFixed(3)}, ${p[1].toFixed(3)}</td></tr></table><p>${MB(p[7])}</p>`;
+    const kk = Math.round(p[0] * 20) + "," + Math.round(p[1] * 20); let same = 0; for (const q of P) if (Math.round(q[0] * 20) + "," + Math.round(q[1] * 20) === kk) same++;
+    if (same > 1) h += `<p class="sub">${fmt(same)} meteorites in the record share this spot (within about 5 km). Antarctic and desert stones are often logged at one point per ice field or search area.</p>`;
+  } else if (S.sel) {
+    const iso = S.sel, c = SITE.c[iso];
+    h = `<button class="back">Back</button><h4>Country</h4><div class="big">${esc(CN(iso))}</div>`;
+    if (!c) h += `<p class="sub">No meteorites with a point here.</p>`;
+    else {
+      h += `<table><tr><td>Witnessed falls</td><td class="num">${fmt(c[0])}</td></tr><tr><td>Expected from its land area</td><td class="num">${c[2].toFixed(1)}</td></tr><tr><td>Falls against an even spread</td><td class="num">${c[3] == null ? "n/a" : c[3].toFixed(1) + " times"}</td></tr><tr><td>Finds with a point here</td><td class="num">${fmt(c[1])}</td></tr><tr><td>Population (rough)</td><td class="num">${c[4] >= 1e6 ? (c[4] / 1e6).toFixed(1) + " million" : fmt(c[4])}</td></tr><tr><td>Land area</td><td class="num">${fmt(c[5])} km²</td></tr></table>`;
+      if (P) { const L0 = []; for (let i = 0; i < P.length; i++) if (P[i][10] === iso && P[i][4]) L0.push(i); L0.sort((a, b) => P[a][2] - P[b][2]);
+        if (L0.length) h += `<h4>Oldest witnessed falls</h4><ol>` + L0.slice(0, 8).map(i => `<li><span class="go" data-m="${i}">${esc(P[i][8])}</span> <small>${P[i][2] || ""}, ${wt(P[i][3])}</small></li>`).join("") + `</ol>`; }
+    }
+    note(c ? `<b>${esc(CN(iso))}</b>: ${fmt(c[0])} falls, ${c[2].toFixed(1)} expected` : "");
+  } else {
+    h = `<h4>On the map now</h4><div class="big">${fmt(CNT.n)}</div><p class="sub">meteorites, ${S.y0} to ${S.y1}</p><table><tr><td>Witnessed falls</td><td class="num">${fmt(CNT.f)}</td></tr><tr><td>Finds</td><td class="num">${fmt(CNT.k)}</td></tr></table>`;
+    h += `<h4>The whole record</h4><table>` + REGIONS.map(([n, c]) => `<tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${c};margin-right:6px"></i>${esc(n)}</td><td class="num">${fmt(R.regions[n].n)}</td><td class="num"><small>${fmt(R.regions[n].falls)} falls</small></td></tr>`).join("") + `</table>`;
+    h += `<h4>Famous falls</h4><ul>` + ["Ensisheim", "L'Aigle", "Sikhote-Alin", "Allende", "Murchison", "Peekskill", "Chelyabinsk", "Tissint"].map(n => `<li><span class="go" data-n="${esc(n)}">${esc(n)}</span> <small>${R.spot[n].y}, ${esc(R.spot[n].country)}</small></li>`).join("") + `</ul>`;
+    h += `<p class="sub">Click a dot for a meteorite, a country for its falls. Turn on "Countries: falls against an even spread" in Map layers to shade each country.</p>`;
+    note("");
+  }
+  box.innerHTML = h;
+  const b = box.querySelector(".back"); if (b) b.onclick = () => { S.met = null; S.sel = null; map.closePopup(); cLayer.setStyle(cStyle); dots.draw(); side(); };
+  box.querySelectorAll("[data-c]").forEach(e => e.onclick = () => { S.met = null; pickCountry(e.dataset.c, true); });
+  box.querySelectorAll("[data-m]").forEach(e => e.onclick = () => pickMet(+e.dataset.m, true));
+  box.querySelectorAll("[data-n]").forEach(e => e.onclick = () => byName(e.dataset.n));
+}
+function toMap() { if (small()) document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "start" }); }
+const FIT = { USA: [[24, -125], [50, -66]], FRA: [[41.3, -5.2], [51.2, 9.6]], NOR: [[57.9, 4.5], [71.2, 31]], RUS: [[41, 27], [70, 140]], NLD: [[50.7, 3.3], [53.6, 7.3]], CHN: [[18, 73], [53.6, 135]], CHL: [[-56, -76], [-17.5, -66]], NZL: [[-47.5, 166], [-34, 179]], ESP: [[35.8, -9.5], [43.9, 4.4]], ATA: [[-86, -180], [-62, 180]], CAN: [[42, -140], [72, -52]], GBR: [[49.8, -8.5], [59, 2]] };
+function fitIso(iso) { const f = WORLD.features.find(x => x.properties.iso === iso); if (FIT[iso]) return map.fitBounds(FIT[iso]); if (f) return map.fitBounds(L.geoJSON(f).getBounds(), { padding: [10, 10], maxZoom: 7 }); const g = SITE.cpos[iso]; if (g) map.setView([g[1], g[0]], 7); }
+function pickCountry(iso, move) { S.sel = iso; S.met = null; if (move) { fitIso(iso); toMap(); } cLayer.setStyle(cStyle); dots.draw(); side(); }
+function pickMet(i, move) {
+  S.met = i; const p = P[i]; S.sel = null;
+  if (!keep(p)) { if (p[4] && S.f === "found") setFall("all"); if (!p[4] && S.f === "fell") setFall("all"); if (p[2] && (p[2] < S.y0 || p[2] > S.y1)) setYears(YMIN, YMAX); if (!S.grp.has(p[5])) { S.grp = new Set(GROUPS.map((g, k) => k)); document.querySelector("#grpRow .btn").click(); } LY.falls = true; LY.finds = true; }
+  if (move) { map.setView([p[0], p[1]], Math.max(map.getZoom(), 7)); toMap(); }
+  L.popup({ maxWidth: 270 }).setLatLng([p[0], p[1]]).setContent(`<b>${esc(p[8])}</b><br>${p[4] ? "Witnessed fall" : "Find"}${p[2] ? ", " + p[2] : ""}<br>${esc(p[9])} · ${wt(p[3])}<br>${esc(CN(p[10]))} · ${MB(p[7])}`).openOn(map);
+  note(`<b>${esc(p[8])}</b>${p[2] ? ", " + p[2] : ""}`); cLayer.setStyle(cStyle); dots.draw(); side();
+}
+function byName(n) { if (!P) return; const i = P.findIndex(p => p[8] === n); if (i >= 0) { document.getElementById("atlas").scrollIntoView({ behavior: "smooth" }); setTimeout(() => pickMet(i, true), 250); } }
+(function focusRow() {
+  const row = document.getElementById("focusRow");
+  const F = [["Antarctica", "ant"], ["Sahara", [[15, -17], [34, 34]]], ["Oman", [[16.5, 51.5], [23.5, 59.8]]], ["Europe", [[35, -12], [65, 40]]], ["India", [[6, 67], [36, 97]]], ["Japan", [[30, 128], [46, 146]]], ["United States", [[24, -125], [50, -66]]], ["Atacama", [[-28, -71.5], [-19, -67.5]]], ["Nullarbor", [[-33, 122], [-28, 133]]], ["World", null]];
+  F.forEach(([n, b]) => { const x = document.createElement("button"); x.className = "btn"; x.textContent = n; x.onclick = () => { if (!b) { S.sel = null; S.met = null; map.closePopup(); map.setView(...HOME()); cLayer.setStyle(cStyle); side(); } else if (b === "ant") map.setView([-77, 100], small() ? 1.5 : 2); else map.fitBounds(b); toMap(); }; row.appendChild(x); });
+})();
+
+/* ---------- search: countries and meteorites ---------- */
+(function search() {
+  const inp = document.getElementById("q"), sug = document.getElementById("sug"); let opts = [], k = -1;
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  function build(q) {
+    const nq = norm(q); if (nq.length < 2) return [];
+    const out = [];
+    Object.keys(SITE.cname).forEach(iso => { const n = CN(iso); if (norm(n).includes(nq)) out.push({ t: "c", n, iso, s: norm(n).startsWith(nq) ? 6 : 2 }); });
+    if (P) { let m = 0; for (let i = 0; i < P.length; i++) { const nm = norm(P[i][8]); if (nm.includes(nq)) { out.push({ t: "m", n: P[i][8], i, s: (nm === nq ? 8 : nm.startsWith(nq) ? 3 : 1) + (P[i][4] ? 1.5 : 0) + Math.max(0, Math.log10(Math.max(1, P[i][3]))) / 4 }); if (++m > 600) break; } } }
+    return out.sort((a, b) => b.s - a.s).slice(0, 12);
+  }
+  const lab = o => o.t === "c" ? `${esc(o.n)} <span>country</span>` : `${esc(o.n)} <span>${P[o.i][4] ? "fall" : "find"}${P[o.i][2] ? " " + P[o.i][2] : ""}, ${esc(CN(P[o.i][10]))}</span>`;
+  const show = () => { sug.innerHTML = opts.map((o, i) => `<li role="option" aria-selected="${i === k}" data-i="${i}">${lab(o)}</li>`).join(""); sug.style.display = opts.length ? "block" : "none"; };
+  const choose = o => { sug.style.display = "none"; inp.value = o.n; inp.blur(); if (o.t === "c") pickCountry(o.iso, true); else pickMet(o.i, true); };
+  inp.addEventListener("input", () => { opts = build(inp.value); k = -1; show(); });
+  inp.addEventListener("keydown", e => { if (e.key === "ArrowDown") { k = Math.min(opts.length - 1, k + 1); show(); e.preventDefault(); } else if (e.key === "ArrowUp") { k = Math.max(0, k - 1); show(); e.preventDefault(); } else if (e.key === "Enter" && opts.length) { choose(opts[Math.max(0, k)]); } else if (e.key === "Escape") { sug.style.display = "none"; } });
+  sug.addEventListener("click", e => { const li = e.target.closest("li"); if (li) choose(opts[+li.dataset.i]); });
+  document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) sug.style.display = "none"; });
+})();
+map.on("zoomend moveend", placeNames);
+
+/* ---------- charts ---------- */
+function stack100(box, rows, cats, aria) {   // rows: [{n, v:[...]}]; cats: [[name, colour]]
+  resp(box, (w, sm) => {
+    const lw = sm ? 92 : 150, rh = 36, h = rows.length * rh + 8, x0 = lw, x1 = w - 4;
+    const svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": aria }, box);
+    rows.forEach((r, i) => {
+      const y = 4 + i * rh, tot = r.v.reduce((a, b) => a + b, 0); let x = x0;
+      lbl(svg, x0 - 8, y + 18, r.n, "lab b", "end"); if (r.sub) lbl(svg, x0 - 8, y + 30, r.sub, "lab s m", "end");
+      r.v.forEach((v, k) => { if (!v) return; const bw = (x1 - x0) * v / tot; const b = el("rect", { x, y: y + 2, width: Math.max(.5, bw - .5), height: rh - 10, fill: cats[k][1] }, svg);
+        if (bw > 34) lbl(svg, x + 4, y + 20, Math.round(100 * v / tot) + "%", "lab s").setAttribute("style", "fill:#fff;font-weight:500");
+        b.addEventListener("mousemove", ev => showTip(`<b>${esc(r.n)}: ${esc(cats[k][0])}</b><br>${fmt(v)} (${(100 * v / tot).toFixed(1)}%)`, ev.clientX, ev.clientY)); b.addEventListener("mouseleave", hideTip); x += bw; });
+    });
+  });
+}
+function regChart() {
+  const RG = REGIONS.map(r => r[0]);
+  stack100(document.getElementById("regChart"), [
+    { n: "All", sub: fmt(R.source.n), v: RG.map(k => R.regions[k].n) },
+    { n: "Finds", sub: fmt(R.source.finds), v: RG.map(k => R.regions[k].finds) },
+    { n: "Falls", sub: fmt(R.source.falls), v: RG.map(k => R.regions[k].falls) }], REGIONS, "Share of meteorites by region recovered");
+  document.getElementById("regLegend").innerHTML = REGIONS.map(([n, c]) => `<span><i class="sq" style="background:${c}"></i>${esc(n)}</span>`).join("");
+}
+function clsChart() {
+  const C = R.classes_list;
+  stack100(document.getElementById("clsChart"), [
+    { n: "Falls", v: C.map(c => c.falls_pct) }, { n: "Antarctica", sub: "finds", v: C.map(c => c.ant_pct) },
+    { n: "Hot deserts", sub: "finds", v: C.map(c => c.hot_pct) }, { n: "Elsewhere", sub: "finds", v: C.map(c => c.rest_pct) }], GROUPS, "Share of meteorite classes by how recovered");
+  document.getElementById("clsLegend").innerHTML = GROUPS.map(([n, c]) => `<span><i class="sq" style="background:${c}"></i>${esc(n)}</span>`).join("");
+}
+function decChart() {
+  const D = R.decades, RG = REGIONS.map(r => r[0]);
+  resp(document.getElementById("decChart"), (w, sm) => {
+    const h = sm ? 290 : 350, m = { l: 50, r: 40, t: 22, b: 28 }, svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Stacked bars of finds per decade by region, with a line of witnessed falls" }, document.getElementById("decChart"));
+    const mx = Math.max(...D.map(d => d.finds)), mf = 100, bw = (w - m.l - m.r) / D.length, Y = v => (h - m.t - m.b) * v / mx, YF = v => h - m.b - (h - m.t - m.b) * v / mf;
+    for (let v = 0; v <= mx; v += 2500) { const y = h - m.b - Y(v); el("line", { x1: m.l, x2: w - m.r, y1: y, y2: y, stroke: css("--rule") }, svg); lbl(svg, m.l - 6, y + 4, fmt(v), "lab s m", "end"); }
+    for (let v = 0; v <= mf; v += 25) lbl(svg, w - m.r + 5, YF(v) + 4, v, "lab s", "start").setAttribute("style", `fill:${FALLC}`);
+    lbl(svg, m.l, m.t - 2, "finds", "lab s m"); lbl(svg, w - m.r - 4, m.t - 2, "falls", "lab s", "end").setAttribute("style", `fill:${FALLC}`);
+    D.forEach((d, i) => {
+      let y = h - m.b; const x = m.l + i * bw + 1;
+      RG.forEach((k, j) => { const v = d[k] || 0; if (!v) return; const hh = Y(v); y -= hh; el("rect", { x, y, width: bw - 2, height: hh, fill: RC[j] }, svg); });
+      const hit = el("rect", { x: x - 1, y: m.t, width: bw, height: h - m.t - m.b, fill: "transparent" }, svg);
+      hit.addEventListener("mousemove", ev => showTip(`<b>${d.dec}s</b>: ${fmt(d.finds)} finds, ${fmt(d.falls)} falls<br>` + RG.map(k => `${esc(k)} ${fmt(d[k])}`).join("<br>"), ev.clientX, ev.clientY)); hit.addEventListener("mouseleave", hideTip);
+      if (d.dec % (sm ? 50 : 20) === 0) lbl(svg, x + bw / 2, h - 10, d.dec + "s", "lab s m", "middle");
+    });
+    el("polyline", { points: D.map((d, i) => `${m.l + i * bw + bw / 2},${YF(d.falls)}`).join(" "), fill: "none", stroke: FALLC, "stroke-width": 2.4 }, svg);
+    D.forEach((d, i) => el("circle", { cx: m.l + i * bw + bw / 2, cy: YF(d.falls), r: 2.6, fill: FALLC }, svg));
+  });
+}
+function contChart() {
+  const C = R.continents_list;
+  resp(document.getElementById("contChart"), (w, sm) => {
+    const lw = sm ? 100 : 130, rh = 30, h = C.length * rh + 26, x0 = lw, x1 = w - 60, mx = 400;
+    const svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Witnessed falls by continent against an even spread" }, document.getElementById("contChart"));
+    for (let v = 0; v <= mx; v += 100) { const x = x0 + (x1 - x0) * v / mx; el("line", { x1: x, x2: x, y1: 0, y2: h - 20, stroke: css("--rule") }, svg); lbl(svg, x, h - 6, v, "lab s m", "middle"); }
+    C.forEach((c, i) => { const y = 4 + i * rh, bw = (x1 - x0) * c.falls / mx, ex = x0 + (x1 - x0) * c.expected / mx;
+      lbl(svg, x0 - 8, y + 16, c.cont, "lab", "end");
+      const b = el("rect", { x: x0, y: y + 3, width: Math.max(1, bw), height: rh - 10, fill: c.ratio >= 1 ? FALLC : "#9C8460", rx: 2 }, svg);
+      el("line", { x1: ex, x2: ex, y1: y, y2: y + rh - 4, stroke: css("--fg"), "stroke-width": 2.4 }, svg);
+      lbl(svg, Math.max(x0 + bw, ex) + 6, y + 16, `${c.falls} (${c.ratio.toFixed(1)}×)`, "lab s b");
+      b.addEventListener("mousemove", ev => showTip(`<b>${esc(c.cont)}</b><br>${c.falls} falls; ${c.expected.toFixed(0)} expected from ${c.area_pct}% of the land<br>${c.pop_pct}% of the world's people`, ev.clientX, ev.clientY)); b.addEventListener("mouseleave", hideTip); });
+  });
+}
+function ratioChart() {
+  const top = R.countries.ratio_top, low = R.countries.ratio_low;
+  const rows = top.map(r => ({ ...r, c: FALLC })).concat(low.map((r, i) => ({ ...r, c: "#9C8460", gap: i === 0 })));
+  resp(document.getElementById("ratioChart"), (w, sm) => {
+    const lw = sm ? 112 : 150, rh = 24, h = rows.length * rh + 30, x0 = lw, x1 = w - 70;
+    const X = r => x0 + (x1 - x0) * (Math.log10(Math.max(r, .02)) + 2) / 3.3;   // log scale .01 to 20
+    const svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Observed over expected falls by country, log scale" }, document.getElementById("ratioChart"));
+    [.01, .1, 1, 10].forEach(v => { const x = X(v); el("line", { x1: x, x2: x, y1: 0, y2: h - 22, stroke: v === 1 ? css("--fg") : css("--rule"), "stroke-width": v === 1 ? 1.4 : 1 }, svg); lbl(svg, x, h - 8, v === 1 ? "1 = even" : String(v), "lab s m", "middle"); });
+    rows.forEach((r, i) => { const y = 4 + i * rh + (r.gap || i > top.length ? 8 : 0);
+      if (r.gap) el("line", { x1: 0, x2: w, y1: y - 3, y2: y - 3, stroke: css("--border"), "stroke-dasharray": "3 3" }, svg);
+      lbl(svg, x0 - 8, y + 14, r.name.replace("United Kingdom", "UK").replace("United States", "US").replace("Democratic Republic of the Congo", "DR Congo"), "lab", "end");
+      const a = X(1), b = X(r.ratio || .011), bar = el("rect", { x: Math.min(a, b), y: y + 3, width: Math.max(2, Math.abs(b - a)), height: rh - 9, fill: r.c, rx: 2 }, svg);
+      lbl(svg, r.ratio >= 1 ? b + 6 : a + 6, y + 14, `${r.falls} / ${r.expected.toFixed(r.expected < 10 ? 1 : 0)}`, "lab s");
+      bar.addEventListener("mousemove", ev => showTip(`<b>${esc(r.name)}</b><br>${r.falls} falls, ${r.expected.toFixed(1)} expected: ${r.ratio.toFixed(2)} times`, ev.clientX, ev.clientY)); bar.addEventListener("mouseleave", hideTip); });
+  });
+}
+function popChart() {
+  const C = Object.entries(SITE.c).filter(([iso, c]) => c[0] > 0 && c[5] >= 20000 && c[4] > 0).map(([iso, c]) => ({ iso, f: c[0] / c[5] * 1e6, p: c[4] / c[5], n: c[0] }));
+  resp(document.getElementById("popChart"), (w, sm) => {
+    const h = sm ? 300 : 380, m = { l: 48, r: 14, t: 12, b: 40 }, svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Scatter of falls per million square kilometres against people per square kilometre" }, document.getElementById("popChart"));
+    const X = p => m.l + (Math.log10(p) + .3) / 3.75 * (w - m.l - m.r), Y = f => h - m.b - (Math.log10(f) + .6) / 3.2 * (h - m.t - m.b);
+    [1, 10, 100, 1000].forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t, y2: h - m.b, stroke: css("--rule") }, svg); lbl(svg, X(v), h - m.b + 15, fmt(v), "lab s m", "middle"); });
+    [1, 10, 100, 1000].forEach(v => { el("line", { x1: m.l, x2: w - m.r, y1: Y(v), y2: Y(v), stroke: css("--rule") }, svg); lbl(svg, m.l - 6, Y(v) + 4, v, "lab s m", "end"); });
+    lbl(svg, (m.l + w) / 2, h - 4, "people per km²", "lab s m", "middle"); lbl(svg, m.l + 4, m.t + 4, "falls per million km²", "lab s m");
+    const show = { JPN: "Japan", ITA: "Italy", FRA: "France", DEU: "Germany", GBR: "UK", IND: "India", USA: "US", CHN: "China", RUS: "Russia", CAN: "Canada", BRA: "Brazil", AUS: "Australia", BGD: "Bangladesh", DZA: "Algeria", NGA: "Nigeria" };
+    C.forEach(c => { const d = el("circle", { cx: X(c.p), cy: Y(c.f), r: Math.max(3, Math.min(9, 2 + Math.sqrt(c.n))), fill: FALLC, "fill-opacity": .55, stroke: css("--card"), "stroke-width": .8 }, svg);
+      d.style.cursor = "pointer"; d.addEventListener("mousemove", ev => showTip(`<b>${esc(CN(c.iso))}</b><br>${c.n} falls · ${c.f.toFixed(1)} per million km²<br>${c.p.toFixed(0)} people per km²`, ev.clientX, ev.clientY)); d.addEventListener("mouseleave", hideTip);
+      d.addEventListener("click", () => { document.getElementById("atlas").scrollIntoView({ behavior: "smooth" }); setTimeout(() => pickCountry(c.iso, true), 300); });
+      if (show[c.iso] && !(sm && ["NGA", "DZA", "BGD", "ITA", "DEU"].includes(c.iso))) { const rt = X(c.p) > w - 90; lbl(svg, X(c.p) + (rt ? -8 : 8), Y(c.f) + 4, show[c.iso], "lab s", rt ? "end" : "start"); } });
+  });
+}
+function areaTable() {
+  const t = document.getElementById("areaTable"), A = R.areas.slice(0, 15);
+  const Z = { "Yamato": [[-73, 33], [-70, 37]], "Northwest Africa": [[20, -17], [36, 10]], "Dhofar": [[17, 53], [20, 56]], "Dar al Gani": [[26.5, 15.5], [27.5, 17]], "Jiddat al Harasis": [[19.5, 55.5], [20.5, 57]], "Sayh al Uhaymir": [[20.5, 56.5], [21.5, 57.5]] };
+  t.innerHTML = `<thead><tr><th>Collection area</th><th>Region</th><th class="r">Meteorites</th><th class="r">First</th></tr></thead><tbody>` + A.map((a, i) => `<tr data-i="${i}"><td>${esc(a.area)}</td><td><i style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:${RC[REGIONS.findIndex(r => r[0] === a.region)]}"></i>${esc(a.region)}</td><td class="r">${fmt(a.n)}</td><td class="r">${a.first || ""}</td></tr>`).join("") + `</tbody>`;
+  t.querySelectorAll("tr[data-i]").forEach(r => r.onclick = () => { const a = A[+r.dataset.i]; document.getElementById("atlas").scrollIntoView({ behavior: "smooth" }); setFall("found");
+    setTimeout(() => { if (Z[a.area]) return map.fitBounds(Z[a.area]); if (!P) return; let la = [], lo = []; for (const p of P) if (p[8].startsWith(a.area + " ")) { la.push(p[0]); lo.push(p[1]); } if (la.length) { la.sort((x, y) => x - y); lo.sort((x, y) => x - y); const q = k => k[Math.floor(k.length / 2)]; map.setView([q(la), q(lo)], 7); } }, 300); });
+}
+function heavyTable() {
+  const t = document.getElementById("heavyTable"), H = R.heaviest;
+  t.innerHTML = `<thead><tr><th>Meteorite</th><th>Country</th><th class="r">Tonnes</th><th>Class</th><th class="r">Year</th></tr></thead><tbody>` + H.map((m, i) => `<tr data-i="${i}"><td>${esc(m.name)}</td><td>${esc(m.country || "")}</td><td class="r">${m.t.toFixed(1)}</td><td>${esc(m.cls)}</td><td class="r">${m.y || ""} ${m.fall === "Fell" ? "fell" : "found"}</td></tr>`).join("") + `</tbody>`;
+  t.querySelectorAll("tr[data-i]").forEach(r => r.onclick = () => byName(H[+r.dataset.i].name));
+}
+function charts() { regChart(); clsChart(); decChart(); contChart(); ratioChart(); popChart(); areaTable(); heavyTable(); }
+
+/* ---------- start ---------- */
+document.getElementById("theme").onclick = () => { const r = document.documentElement; r.dataset.theme = isDark() ? "light" : "dark"; setTiles(); legend(); cLayer.setStyle(cStyle); redraws.forEach(f => f()); };
+charts(); setTiles(); legend(); setYears(YMIN, YMAX); placeNames(); side();
+</script>
+/*FULLSCREEN*/
+</body>
+</html>
